@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { LogOut, ArrowDown } from 'lucide-react';
+import { LogOut, ChevronDown } from 'lucide-react';
 import { useAppSelector } from '../../store/hooks';
 import { selectUser } from '../../store/features/authSlice';
 import { profileNavigation } from '../../constants';
@@ -43,19 +43,17 @@ export const UserMenu = ({ onLogout }: UserMenuProps) => {
 
 	return (
 		<div className='relative' ref={menuRef}>
-			{/* User Button */}
 			<button
 				ref={buttonRef}
 				onClick={() => setIsOpen(!isOpen)}
 				className='flex items-center gap-3 px-4 py-2 text-sm transition-colors rounded-full bg-gray-50 hover:bg-gray-100 dark:bg-dark-border/50 dark:hover:bg-dark-border'
 			>
-				<div className='flex items-center gap-2'>
-					<ArrowDown className='w-4 h-4 text-primary-500' />
+				<div className='flex items-center justify-center gap-2'>
 					<span className='font-medium text-gray-700 dark:text-gray-200'>{user?.email}</span>
+					<ChevronDown className='w-4 h-4 dark:text-white' />
 				</div>
 			</button>
 
-			{/* Dropdown Menu */}
 			<AnimatePresence>
 				{isOpen && (
 					<motion.div

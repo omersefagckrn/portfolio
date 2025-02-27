@@ -272,6 +272,95 @@ export const fetchOrders = createAsyncThunk('auth/fetchOrders', async (_, { reje
 	}
 });
 
+export const forgotPassword = createAsyncThunk('auth/forgotPassword', async (email: string, { rejectWithValue }) => {
+	try {
+		// Rate limiting kontrolü
+		const lastAttempt = localStorage.getItem('lastPasswordResetAttempt');
+		const now = Date.now();
+
+		if (lastAttempt) {
+			const timeSinceLastAttempt = now - parseInt(lastAttempt);
+			if (timeSinceLastAttempt < 60000) {
+				const remainingSeconds = Math.ceil((60000 - timeSinceLastAttempt) / 1000);
+				return rejectWithValue(`Lütfen ${remainingSeconds} saniye bekleyip tekrar deneyin.`);
+			}
+		}
+
+		const { error } = await supabase.auth.resetPasswordForEmail(email, {
+			redirectTo: `${window.location.origin}/reset-password`
+		});
+
+		if (error) {
+			if (error.message.includes('Email not found')) {
+				return rejectWithValue('Bu email adresi ile kayıtlı bir hesap bulunamadı.');
+			}
+			if (error.message.includes('Too many requests')) {
+				return rejectWithValue('Çok fazla deneme yaptınız. Lütfen birkaç dakika bekleyip tekrar deneyin.');
+			}
+			return rejectWithValue(translateAuthError(error.message));
+		}
+
+		localStorage.setItem('lastPasswordResetAttempt', now.toString());
+		return true;
+	} catch (error) {
+		if (error instanceof Error) {
+			return rejectWithValue(translateAuthError(error.message));
+		}
+		return rejectWithValue('Şifre sıfırlama işlemi sırasında beklenmeyen bir hata oluştu');
+	}
+});
+
+export const resetPassword = createAsyncThunk('auth/resetPassword', async ({ password, token }: { password: string; token: string }, { rejectWithValue }) => {
+	try {
+		// URL'den refresh token'ı al
+		const hashParams = new URLSearchParams(window.location.hash.substring(1));
+		const refreshToken = hashParams.get('refresh_token');
+
+		if (!refreshToken) {
+			return rejectWithValue('Geçersiz şifre sıfırlama oturumu.');
+		}
+
+		// Önce mevcut oturumu temizle
+		await supabase.auth.signOut();
+
+		// Access token ve refresh token ile oturum oluştur
+		const { data: sessionData, error: sessionError } = await supabase.auth.setSession({
+			access_token: token,
+			refresh_token: refreshToken
+		});
+
+		if (sessionError) {
+			if (sessionError.message.includes('expired') || sessionError.message.includes('invalid')) {
+				return rejectWithValue('Şifre sıfırlama bağlantısının süresi dolmuş. Lütfen yeni bir bağlantı talep edin.');
+			}
+			return rejectWithValue(translateAuthError(sessionError.message));
+		}
+
+		if (!sessionData.user) {
+			return rejectWithValue('Geçersiz şifre sıfırlama oturumu.');
+		}
+
+		// Şifreyi güncelle
+		const { error: updateError } = await supabase.auth.updateUser({
+			password: password
+		});
+
+		if (updateError) {
+			return rejectWithValue(translateAuthError(updateError.message));
+		}
+
+		// İşlem başarılı olduktan sonra oturumu sonlandır
+		await supabase.auth.signOut();
+
+		return true;
+	} catch (error) {
+		if (error instanceof Error) {
+			return rejectWithValue(translateAuthError(error.message));
+		}
+		return rejectWithValue('Şifre güncelleme işlemi sırasında beklenmeyen bir hata oluştu');
+	}
+});
+
 const authSlice = createSlice({
 	name: 'auth',
 	initialState,
@@ -393,6 +482,34 @@ const authSlice = createSlice({
 			.addCase(fetchOrders.rejected, (state, action) => {
 				state.ordersLoading = false;
 				state.ordersError = action.payload as string;
+			});
+
+		// Forgot Password
+		builder.addCase(forgotPassword.pending, (state) => {
+			state.isLoading = true;
+			state.error = null;
+		})
+			.addCase(forgotPassword.fulfilled, (state) => {
+				state.isLoading = false;
+				state.error = null;
+			})
+			.addCase(forgotPassword.rejected, (state, action) => {
+				state.isLoading = false;
+				state.error = action.payload as string;
+			});
+
+		// Reset Password
+		builder.addCase(resetPassword.pending, (state) => {
+			state.isLoading = true;
+			state.error = null;
+		})
+			.addCase(resetPassword.fulfilled, (state) => {
+				state.isLoading = false;
+				state.error = null;
+			})
+			.addCase(resetPassword.rejected, (state, action) => {
+				state.isLoading = false;
+				state.error = action.payload as string;
 			});
 	}
 });

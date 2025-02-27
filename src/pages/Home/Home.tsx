@@ -3,6 +3,7 @@ import Hero from '../../components/Hero/Hero';
 import About from '../../components/About/About';
 import FAQ from '../../components/FAQ/FAQ';
 import Footer from '../../components/Footer/Footer';
+import Skills from '../../components/Skills/Skills';
 
 const Home = () => {
 	return (
@@ -15,6 +16,7 @@ const Home = () => {
 			<main>
 				<Hero />
 				<About />
+				<Skills />
 				<FAQ />
 				<Footer />
 			</main>

@@ -56,3 +56,14 @@ export const corporateSchema = Yup.object({
 	phone: Yup.string().required('Telefon alanı zorunludur').min(10, 'Telefon numarası en az 10 karakter olmalıdır'),
 	address: Yup.string().required('Adres alanı zorunludur').min(10, 'Adres en az 10 karakter olmalıdır')
 });
+
+export const forgotPasswordSchema = Yup.object().shape({
+	email: Yup.string().email('Geçerli bir e-posta adresi giriniz').required('E-posta adresi zorunludur')
+});
+
+export const resetPasswordSchema = Yup.object().shape({
+	password: Yup.string().min(6, 'Şifre en az 6 karakter olmalıdır').required('Şifre zorunludur'),
+	confirmPassword: Yup.string()
+		.oneOf([Yup.ref('password')], 'Şifreler eşleşmiyor')
+		.required('Şifre tekrarı zorunludur')
+});

@@ -10,15 +10,7 @@ import { Layout } from './components/Layout/Layout';
 import { supabase } from './lib/supabase';
 import { ProfileLayout } from './components/Layout/ProfileLayout';
 import { Toaster } from 'react-hot-toast';
-import Profile from './pages/Profile/Profile';
-import ProfileEdit from './pages/Profile/ProfileEdit';
-import ProfileOrders from './pages/Profile/ProfileOrders';
-import WebApp from './pages/WebApp/WebApp';
-import MobileApp from './pages/MobileApp/MobileApp';
-import Home from './pages/Home/Home';
-import { Login } from './pages/Login/Login';
-import { Register } from './pages/Register/Register';
-import { EmailConfirmation } from './pages/Email/EmailConfirmation';
+import { Home, WebApp, MobileApp, Login, Register, EmailConfirmation, ForgotPassword, ResetPassword, Profile, ProfileEdit, ProfileOrders, PrivacyTerms } from './pages';
 
 interface RouteProps {
 	children: React.ReactNode;
@@ -153,6 +145,15 @@ const AppContent = () => {
 					</PublicRoute>
 				}
 			/>
+			<Route
+				path='/forgot-password'
+				element={
+					<PublicRoute>
+						<ForgotPassword />
+					</PublicRoute>
+				}
+			/>
+			<Route path='/reset-password' element={<ResetPassword />} />
 
 			<Route
 				path='/profile'
@@ -168,6 +169,14 @@ const AppContent = () => {
 				<Route path='edit' element={<ProfileEdit />} />
 				<Route path='orders' element={<ProfileOrders />} />
 			</Route>
+			<Route
+				path='/privacy-terms'
+				element={
+					<Layout>
+						<PrivacyTerms />
+					</Layout>
+				}
+			/>
 		</Routes>
 	);
 };
@@ -182,7 +191,7 @@ const App = () => {
 					<Toaster
 						position='top-right'
 						toastOptions={{
-							duration: 4000,
+							duration: 2500,
 							className: '!bg-white dark:!bg-dark-card !text-gray-900 dark:!text-white'
 						}}
 					/>

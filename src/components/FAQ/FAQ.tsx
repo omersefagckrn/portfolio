@@ -45,32 +45,47 @@ export const FAQ = () => {
 					className='max-w-2xl mx-auto mt-16'
 				>
 					<div className='divide-y divide-gray-200 dark:divide-dark-border'>
-						{faqs.map((faq, index) => (
-							<Disclosure as='div' key={index} className='py-6'>
-								{({ open }: { open: boolean }) => (
-									<>
-										<dt>
-											<Disclosure.Button className='flex items-start justify-between w-full text-left'>
-												<span className='text-base font-semibold leading-7 text-gray-900 dark:text-white'>
-													{faq.question}
-												</span>
-												<span className='flex items-center ml-6 h-7'>
-													<ChevronDown
-														className={cn(
-															'w-6 h-6 transform transition-transform text-gray-600 dark:text-gray-400',
-															open ? 'rotate-180' : ''
-														)}
-														aria-hidden='true'
-													/>
-												</span>
-											</Disclosure.Button>
-										</dt>
-										<Disclosure.Panel as='dd' className='pr-12 mt-2'>
-											<p className='text-base leading-7 text-gray-600 dark:text-gray-400'>{faq.answer}</p>
-										</Disclosure.Panel>
-									</>
-								)}
-							</Disclosure>
+						{faqs.map((section) => (
+							<div key={section.title} className='py-6'>
+								<h2 className='mb-6 text-2xl font-bold text-gray-900 dark:text-white'>{section.title}</h2>
+								<div className='space-y-4'>
+									{section.items.map((item) => (
+										<Disclosure key={item.question}>
+											{({ open }) => (
+												<div className='pt-2'>
+													<Disclosure.Button className='flex justify-between w-full px-4 py-4 text-left rounded-lg bg-gray-50 dark:bg-dark-card hover:bg-gray-100 dark:hover:bg-dark-card/80'>
+														<span className='text-lg font-medium text-gray-900 dark:text-white'>
+															{item.question}
+														</span>
+														<ChevronDown
+															className={cn(
+																'w-5 h-5 text-gray-500 dark:text-gray-400',
+																open && 'transform rotate-180'
+															)}
+														/>
+													</Disclosure.Button>
+													<Disclosure.Panel className='px-4 pt-4 pb-2 text-gray-600 dark:text-gray-300'>
+														<div className='space-y-4'>
+															{item.answer.map((line, index) => (
+																<div
+																	key={index}
+																	className={
+																		line.startsWith('•')
+																			? 'ml-4'
+																			: 'font-medium'
+																	}
+																>
+																	{line}
+																</div>
+															))}
+														</div>
+													</Disclosure.Panel>
+												</div>
+											)}
+										</Disclosure>
+									))}
+								</div>
+							</div>
 						))}
 					</div>
 				</motion.div>

@@ -1,8 +1,7 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '../Button/Button';
-import { X, LogOut, User, Settings } from 'lucide-react';
+import { X, LogOut } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { Dialog } from '@headlessui/react';
 import { MobileMenuProps } from '../../types';
 import { mainNavLinks, profileNavigation } from '../../constants';
 

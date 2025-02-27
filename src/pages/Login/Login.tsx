@@ -8,8 +8,9 @@ import { loginUser, selectError, selectIsLoading, selectIsAuthenticated, clearEr
 import { Button } from '../../components/Button/Button';
 import { Input } from '../../components/Input/Input';
 import { loginSchema } from '../../schemas/auth';
+import { ColoredWall } from '../../components/ColoredWall/ColoredWall';
 
-export const Login = () => {
+const Login = () => {
 	const navigate = useNavigate();
 	const location = useLocation();
 	const dispatch = useAppDispatch();
@@ -79,54 +80,14 @@ export const Login = () => {
 			</Helmet>
 			<div className='flex min-h-screen bg-gray-50 dark:bg-dark-bg'>
 				{/* Left Side - Image */}
-				<div className='relative hidden w-1/2 lg:block'>
-					<motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.5 }} className='absolute inset-0'>
-						<div className='absolute inset-0'>
-							<div className='absolute inset-0 bg-gradient-to-br from-primary-500/20 via-transparent to-primary-500/20 dark:from-primary-500/10 dark:to-primary-500/10' />
-							<svg className='absolute inset-0 w-full h-full opacity-[0.05] dark:opacity-[0.02]' xmlns='http://www.w3.org/2000/svg'>
-								<defs>
-									<pattern id='grid' width='24' height='24' patternUnits='userSpaceOnUse'>
-										<path
-											d='M24 0v1h-1v1h1v1h-1v1h1v1h-1v1h1v1h-1v1h1v1h-1v1h1v1h-1v1h1v1h-1v1h1v1h-1v1h1v1h-1v1h1v1h-1v1h1v1h-1v1h1v1H0V0h1v1h1V0h1v1h1V0h1v1h1V0h1v1h1V0h1v1h1V0h1v1h1V0h1v1h1V0h1v1h1V0h1v1h1V0h1v1h1V0h1v1h1V0z'
-											className='text-black fill-current stroke-none dark:text-white'
-										/>
-									</pattern>
-								</defs>
-								<rect width='100%' height='100%' fill='url(#grid)' />
-							</svg>
-						</div>
-						<div className='absolute inset-0 bg-gradient-to-r from-primary-600/20 to-transparent' />
-					</motion.div>
-					<div className='absolute inset-0 flex items-center justify-center'>
-						<div className='max-w-xl p-8 text-gray-900 dark:text-white'>
-							<motion.h1
-								initial={{ opacity: 0, y: 20 }}
-								animate={{ opacity: 1, y: 0 }}
-								transition={{ duration: 0.5, delay: 0.2 }}
-								className='mb-4 text-5xl font-bold'
-							>
-								Sizler için,
-								<br />
-								Çalışmaya hazırız
-							</motion.h1>
-							<motion.p
-								initial={{ opacity: 0, y: 20 }}
-								animate={{ opacity: 1, y: 0 }}
-								transition={{ duration: 0.5, delay: 0.3 }}
-								className='text-lg text-gray-800 dark:text-white/90'
-							>
-								Profesyonel yazılım hizmetlerine erişin.
-							</motion.p>
-						</div>
-					</div>
-				</div>
+				<ColoredWall title='Tekrar Hoş Geldiniz' description='Hesabınıza giriş yaparak kaldığınız yerden devam edin.' />
 
 				{/* Right Side - Form */}
 				<div className='relative flex items-center justify-center w-full p-8 lg:w-1/2'>
 					<div className='absolute z-10 top-4 left-4'>
 						<Link
 							to='/'
-							className='inline-flex items-center px-4 py-2 text-sm font-medium text-gray-600 transition-colors dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400'
+							className='inline-flex items-center px-4 py-2 text-sm font-medium text-gray-600 transition-colors dark:text-white hover:text-primary-600 dark:hover:text-primary-400'
 						>
 							← Ana Sayfa
 						</Link>
@@ -179,7 +140,7 @@ export const Login = () => {
 								id='email'
 								type='email'
 								label='Email'
-								placeholder='Enter your email'
+								placeholder='E-posta adresinizi giriniz'
 								{...formik.getFieldProps('email')}
 								error={formik.touched.email ? formik.errors.email : undefined}
 							/>
@@ -187,8 +148,8 @@ export const Login = () => {
 							<Input
 								id='password'
 								type='password'
-								label='Password'
-								placeholder='123456'
+								label='Şifre'
+								placeholder='Şifrenizi giriniz'
 								{...formik.getFieldProps('password')}
 								error={formik.touched.password ? formik.errors.password : undefined}
 							/>
@@ -222,3 +183,5 @@ export const Login = () => {
 		</>
 	);
 };
+
+export default Login;

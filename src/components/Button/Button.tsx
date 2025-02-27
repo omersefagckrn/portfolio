@@ -30,8 +30,6 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(({ variant = 'p
 	);
 
 	if (to) {
-		// Link bileşeni disabled özelliğini desteklemediği için,
-		// loading veya disabled durumunda normal button olarak render ediyoruz
 		if (isLoading || disabled) {
 			return createElement('button', {
 				className: baseClassName,

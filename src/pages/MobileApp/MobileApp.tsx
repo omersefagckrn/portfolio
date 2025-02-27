@@ -55,7 +55,7 @@ const MobileApp = () => {
 	return (
 		<>
 			<Helmet>
-				<title>Mobil Uygulama Paketleri | Ömer Sefa Güçkıran</title>
+				<title>Mobil Uygulama Paketleri</title>
 				<meta name='description' content='iOS ve Android için profesyonel mobil uygulama geliştirme paketleri. React Native ile native mobil uygulamalar.' />
 			</Helmet>
 

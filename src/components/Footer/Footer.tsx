@@ -2,15 +2,10 @@ import { Github, Linkedin, Mail, Phone, MessageCircle } from 'lucide-react';
 
 const Footer = () => {
 	return (
-		<footer className='bg-white dark:bg-dark-card'>
-			<div className='px-6 py-12 mx-auto max-w-7xl md:flex md:items-center md:justify-between lg:px-8'>
+		<footer className='bg-white dark:bg-dark-bg'>
+			<div className='px-6 py-10 mx-auto max-w-7xl md:flex md:items-center md:justify-between lg:px-8'>
 				<div className='flex justify-center space-x-6 md:order-2'>
-					<a
-						href='https://github.com/omersefagckrn'
-						target='_blank'
-						rel='noopener noreferrer'
-						className='text-gray-400 transition-colors hover:text-gray-500 dark:hover:text-gray-300'
-					>
+					<a href='https://github.com/omersefagckrn' target='_blank' rel='noopener noreferrer' className='text-black transition-colors dark:text-white'>
 						<span className='sr-only'>GitHub</span>
 						<Github className='w-6 h-6' />
 					</a>
@@ -18,16 +13,16 @@ const Footer = () => {
 						href='https://www.linkedin.com/in/omersefagckrn/'
 						target='_blank'
 						rel='noopener noreferrer'
-						className='text-gray-400 transition-colors hover:text-gray-500 dark:hover:text-gray-300'
+						className='text-black transition-colors dark:text-white'
 					>
 						<span className='sr-only'>LinkedIn</span>
 						<Linkedin className='w-6 h-6' />
 					</a>
-					<a href='mailto:omergckrnx@gmail.com' className='text-gray-400 transition-colors hover:text-gray-500 dark:hover:text-gray-300'>
+					<a href='mailto:dev.omersefaguc@gmail.com' className='text-black transition-colors dark:text-white'>
 						<span className='sr-only'>Email</span>
 						<Mail className='w-6 h-6' />
 					</a>
-					<a href='tel:+905078455183' className='text-gray-400 transition-colors hover:text-gray-500 dark:hover:text-gray-300'>
+					<a href='tel:+905078455183' className='text-black transition-colors dark:text-white'>
 						<span className='sr-only'>Telefon</span>
 						<Phone className='w-6 h-6' />
 					</a>
@@ -35,7 +30,7 @@ const Footer = () => {
 						href='https://wa.me/905078455183?text=Merhaba,%20web%20siteniz%20üzerinden%20ulaşıyorum.%20Proje%20detaylarını%20görüşmek%20istiyorum.'
 						target='_blank'
 						rel='noopener noreferrer'
-						className='text-gray-400 transition-colors hover:text-gray-500 dark:hover:text-gray-300'
+						className='text-black transition-colors dark:text-white'
 					>
 						<span className='sr-only'>WhatsApp</span>
 						<MessageCircle className='w-6 h-6' />

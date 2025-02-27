@@ -27,7 +27,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(({ label, error, c
 							border rounded-lg
 							text-gray-900 dark:text-dark-text
 							text-sm
-							placeholder:text-gray-500 dark:placeholder:text-white/60
+							placeholder:text-gray-500 dark:placeholder:text-white
 							focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500
 							disabled:opacity-50 disabled:cursor-not-allowed
 							transition-colors duration-200

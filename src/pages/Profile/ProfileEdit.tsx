@@ -1,10 +1,11 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { selectUser, selectIsLoading, updateProfile } from '../../store/features/authSlice';
-import { Formik, Form, Field } from 'formik';
+import { Formik, Form } from 'formik';
 import { toast } from 'react-hot-toast';
 import { AppDispatch } from '../../store/store';
 import { corporateSchema, individualSchema } from '../../schemas/auth';
 import { Helmet } from 'react-helmet-async';
+import { Input } from '../../components/Input/Input';
 
 interface FormValues {
 	first_name?: string;
@@ -62,110 +63,70 @@ const ProfileEdit = () => {
 
 					{/* Form */}
 					<Formik initialValues={initialValues} validationSchema={isIndividual ? individualSchema : corporateSchema} onSubmit={handleSubmit}>
-						{({ errors, touched, isSubmitting }) => (
+						{({ errors, touched, isSubmitting, getFieldProps }) => (
 							<Form className='space-y-6'>
 								<div className='grid gap-6 md:grid-cols-2'>
 									{isIndividual ? (
 										<>
 											{/* Bireysel Form Alanları */}
-											<div className='space-y-2'>
-												<label
-													htmlFor='first_name'
-													className='text-sm font-medium text-gray-900 dark:text-white'
-												>
-													Ad
-												</label>
-												<Field
-													name='first_name'
-													type='text'
-													className='w-full px-3 py-2 text-gray-900 border rounded-lg dark:text-white bg-gray-50 dark:bg-dark-border dark:border-dark-border focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 focus:border-transparent'
-												/>
-												{errors.first_name && touched.first_name && (
-													<p className='text-sm text-red-500'>{String(errors.first_name)}</p>
-												)}
-											</div>
+											<Input
+												id='first_name'
+												type='text'
+												label='Ad'
+												{...getFieldProps('first_name')}
+												error={touched.first_name ? errors.first_name : undefined}
+											/>
 
-											<div className='space-y-2'>
-												<label
-													htmlFor='last_name'
-													className='text-sm font-medium text-gray-900 dark:text-white'
-												>
-													Soyad
-												</label>
-												<Field
-													name='last_name'
-													type='text'
-													className='w-full px-3 py-2 text-gray-900 border rounded-lg dark:text-white bg-gray-50 dark:bg-dark-border dark:border-dark-border focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 focus:border-transparent'
-												/>
-												{errors.last_name && touched.last_name && (
-													<p className='text-sm text-red-500'>{String(errors.last_name)}</p>
-												)}
-											</div>
+											<Input
+												id='last_name'
+												type='text'
+												label='Soyad'
+												{...getFieldProps('last_name')}
+												error={touched.last_name ? errors.last_name : undefined}
+											/>
 										</>
 									) : (
 										<>
 											{/* Kurumsal Form Alanları */}
-											<div className='space-y-2'>
-												<label
-													htmlFor='company_name'
-													className='text-sm font-medium text-gray-900 dark:text-white'
-												>
-													Şirket Adı
-												</label>
-												<Field
-													name='company_name'
-													type='text'
-													className='w-full px-3 py-2 text-gray-900 border rounded-lg dark:text-white bg-gray-50 dark:bg-dark-border dark:border-dark-border focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 focus:border-transparent'
-												/>
-												{errors.company_name && touched.company_name && (
-													<p className='text-sm text-red-500'>{String(errors.company_name)}</p>
-												)}
-											</div>
+											<Input
+												id='company_name'
+												type='text'
+												label='Şirket Adı'
+												{...getFieldProps('company_name')}
+												error={touched.company_name ? errors.company_name : undefined}
+											/>
 
-											<div className='space-y-2'>
-												<label
-													htmlFor='tax_number'
-													className='text-sm font-medium text-gray-900 dark:text-white'
-												>
-													Vergi Numarası
-												</label>
-												<Field
-													name='tax_number'
-													type='text'
-													className='w-full px-3 py-2 text-gray-900 border rounded-lg dark:text-white bg-gray-50 dark:bg-dark-border dark:border-dark-border focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 focus:border-transparent'
-												/>
-												{errors.tax_number && touched.tax_number && (
-													<p className='text-sm text-red-500'>{String(errors.tax_number)}</p>
-												)}
-											</div>
+											<Input
+												id='tax_number'
+												type='text'
+												label='Vergi Numarası'
+												{...getFieldProps('tax_number')}
+												error={touched.tax_number ? errors.tax_number : undefined}
+											/>
 										</>
 									)}
 
 									{/* Ortak Form Alanları */}
-									<div className='space-y-2'>
-										<label htmlFor='phone' className='text-sm font-medium text-gray-900 dark:text-white'>
-											Telefon
-										</label>
-										<Field
-											name='phone'
-											type='tel'
-											className='w-full px-3 py-2 text-gray-900 border rounded-lg dark:text-white bg-gray-50 dark:bg-dark-border dark:border-dark-border focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 focus:border-transparent'
-										/>
-										{errors.phone && touched.phone && <p className='text-sm text-red-500'>{String(errors.phone)}</p>}
-									</div>
+									<Input
+										id='phone'
+										type='tel'
+										label='Telefon'
+										{...getFieldProps('phone')}
+										error={touched.phone ? errors.phone : undefined}
+									/>
 
 									<div className='space-y-2 md:col-span-2'>
-										<label htmlFor='address' className='text-sm font-medium text-gray-900 dark:text-white'>
+										<label htmlFor='address' className='block text-sm font-medium text-gray-700 dark:text-dark-text'>
 											Adres
 										</label>
-										<Field
-											name='address'
-											as='textarea'
+										<textarea
+											id='address'
+											{...getFieldProps('address')}
 											rows={3}
-											className='w-full px-3 py-2 text-gray-900 border rounded-lg dark:text-white bg-gray-50 dark:bg-dark-border dark:border-dark-border focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 focus:border-transparent'
+											className='w-full px-4 py-2.5 bg-gray-50 dark:bg-dark-card border rounded-lg text-gray-900 dark:text-dark-text text-sm placeholder:text-gray-500 dark:placeholder:text-white/60 focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200 dark:border-dark-border'
 										/>
-										{errors.address && touched.address && (
-											<p className='text-sm text-red-500'>{String(errors.address)}</p>
+										{touched.address && errors.address && (
+											<p className='mt-1.5 text-sm text-red-500'>{String(errors.address)}</p>
 										)}
 									</div>
 								</div>

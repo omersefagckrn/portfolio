@@ -16,7 +16,7 @@ export const Navbar = () => {
 	const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
 	const getThemeIcon = () => {
-		return currentTheme === 'light' ? <Sun className='w-5 h-5' /> : <Moon className='w-5 h-5' />;
+		return currentTheme === 'light' ? <Sun className='w-5 h-5 text-dark-bg dark:text-white' /> : <Moon className='w-5 h-5 text-dark-bg dark:text-white' />;
 	};
 
 	const handleLogout = () => {
@@ -27,7 +27,7 @@ export const Navbar = () => {
 
 	return (
 		<>
-			<nav className='fixed top-0 left-0 right-0 z-40 border-b shadow-sm bg-white/80 backdrop-blur-md border-gray-200/50 dark:bg-dark-card/80 dark:border-dark-border/50'>
+			<nav className='fixed top-0 left-0 right-0 z-40 bg-white border-b-2 dark:border-none dark:bg-dark-bg'>
 				<div className='container mx-auto'>
 					<div className='flex items-center justify-between h-16'>
 						{/* Navigation Links */}

@@ -55,7 +55,7 @@ const WebApp = () => {
 	return (
 		<>
 			<Helmet>
-				<title>Web Uygulama Paketleri | Ömer Sefa Güçkıran</title>
+				<title>Web Uygulama Paketleri</title>
 				<meta
 					name='description'
 					content='Modern ve profesyonel web uygulaması geliştirme paketleri. React, Node.js ve daha fazlası ile projelerinizi hayata geçirin.'

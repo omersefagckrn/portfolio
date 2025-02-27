@@ -6,7 +6,7 @@ import { useAppSelector } from '../../store/hooks';
 import { selectIsAuthenticated } from '../../store/features/authSlice';
 import { Button } from '../../components/Button/Button';
 
-export const EmailConfirmation = () => {
+const EmailConfirmation = () => {
 	const navigate = useNavigate();
 	const location = useLocation();
 	const isAuthenticated = useAppSelector(selectIsAuthenticated);
@@ -81,3 +81,5 @@ export const EmailConfirmation = () => {
 		</>
 	);
 };
+
+export default EmailConfirmation;
