@@ -4,11 +4,11 @@ import { useFormik } from 'formik';
 import { motion } from 'framer-motion';
 import { PatternFormat } from 'react-number-format';
 import { Helmet } from 'react-helmet-async';
-import { useAppDispatch, useAppSelector } from '../store/hooks';
-import { registerUser, selectError, selectIsLoading, selectIsAuthenticated, clearError } from '../store/features/authSlice';
-import { Button } from '../components/Button/Button';
-import { Input } from '../components/Input/Input';
-import { registerSchema } from '../schemas/auth';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { registerUser, selectError, selectIsLoading, selectIsAuthenticated, clearError } from '../../store/features/authSlice';
+import { Button } from '../../components/Button/Button';
+import { Input } from '../../components/Input/Input';
+import { individualSchema } from '../../schemas/auth';
 
 export const Register = () => {
 	const navigate = useNavigate();
@@ -40,7 +40,7 @@ export const Register = () => {
 			address: '',
 			terms: false
 		},
-		validationSchema: registerSchema,
+		validationSchema: individualSchema,
 		onSubmit: async (values) => {
 			try {
 				const cleanPhone = values.phone.replace(/[^\d]/g, '');
@@ -315,15 +315,24 @@ export const Register = () => {
 				{/* Right Side - Image */}
 				<div className='relative hidden w-1/2 lg:block'>
 					<motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.5 }} className='absolute inset-0'>
-						<img
-							src='https://images.unsplash.com/photo-1579547944212-c4f4961a8dd8?q=80&w=1920&auto=format&fit=crop'
-							alt='Register'
-							className='object-cover w-full h-full'
-						/>
+						<div className='absolute inset-0'>
+							<div className='absolute inset-0 bg-gradient-to-br from-primary-500/20 via-transparent to-primary-500/20 dark:from-primary-500/10 dark:to-primary-500/10' />
+							<svg className='absolute inset-0 w-full h-full opacity-[0.05] dark:opacity-[0.02]' xmlns='http://www.w3.org/2000/svg'>
+								<defs>
+									<pattern id='grid' width='24' height='24' patternUnits='userSpaceOnUse'>
+										<path
+											d='M24 0v1h-1v1h1v1h-1v1h1v1h-1v1h1v1h-1v1h1v1h-1v1h1v1h-1v1h1v1h-1v1h1v1h-1v1h1v1h-1v1h1v1h-1v1h1v1h-1v1h1v1h-1v1h1v1H0V0h1v1h1V0h1v1h1V0h1v1h1V0h1v1h1V0h1v1h1V0h1v1h1V0h1v1h1V0h1v1h1V0h1v1h1V0h1v1h1V0h1v1h1V0z'
+											className='stroke-none fill-current text-black dark:text-white'
+										/>
+									</pattern>
+								</defs>
+								<rect width='100%' height='100%' fill='url(#grid)' />
+							</svg>
+						</div>
 						<div className='absolute inset-0 bg-gradient-to-r from-primary-600/20 to-transparent' />
 					</motion.div>
 					<div className='absolute inset-0 flex items-center justify-center'>
-						<div className='max-w-xl p-8 text-white'>
+						<div className='max-w-xl p-8 text-gray-900 dark:text-white'>
 							<motion.h1
 								initial={{ opacity: 0, y: 20 }}
 								animate={{ opacity: 1, y: 0 }}
@@ -338,7 +347,7 @@ export const Register = () => {
 								initial={{ opacity: 0, y: 20 }}
 								animate={{ opacity: 1, y: 0 }}
 								transition={{ duration: 0.5, delay: 0.3 }}
-								className='text-lg text-white/90'
+								className='text-lg text-gray-800 dark:text-white/90'
 							>
 								Profesyonel yazılım hizmetlerine erişin.
 							</motion.p>

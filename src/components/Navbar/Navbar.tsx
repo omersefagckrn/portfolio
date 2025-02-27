@@ -2,11 +2,12 @@ import { useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { selectCurrentTheme, toggleTheme } from '../../store/features/themeSlice';
 import { selectIsAuthenticated, logoutUser } from '../../store/features/authSlice';
-import { Sun, Moon, Menu, Home, Smartphone, Globe } from 'lucide-react';
+import { Sun, Moon, Menu } from 'lucide-react';
 import { MobileMenu } from './MobileMenu';
 import { Button } from '../Button/Button';
 import { UserMenu } from './UserMenu';
 import { Link } from 'react-router-dom';
+import { mainNavLinks } from '../../constants';
 
 export const Navbar = () => {
 	const dispatch = useAppDispatch();
@@ -22,6 +23,8 @@ export const Navbar = () => {
 		dispatch(logoutUser());
 	};
 
+	const HomeIcon = mainNavLinks[0].icon;
+
 	return (
 		<>
 			<nav className='fixed top-0 left-0 right-0 z-40 border-b shadow-sm bg-white/80 backdrop-blur-md border-gray-200/50 dark:bg-dark-card/80 dark:border-dark-border/50'>
@@ -29,27 +32,16 @@ export const Navbar = () => {
 					<div className='flex items-center justify-between h-16'>
 						{/* Navigation Links */}
 						<div className='hidden lg:flex lg:items-center lg:gap-2'>
-							<Link
-								to='/'
-								className='flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 transition-colors rounded-md dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-dark-border'
-							>
-								<Home className='w-4 h-4' />
-								Ana Sayfa
-							</Link>
-							<Link
-								to='/mobile-app'
-								className='flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 transition-colors rounded-md dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-dark-border'
-							>
-								<Smartphone className='w-4 h-4' />
-								Mobil Uygulama
-							</Link>
-							<Link
-								to='/web-app'
-								className='flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 transition-colors rounded-md dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-dark-border'
-							>
-								<Globe className='w-4 h-4' />
-								Web Uygulama
-							</Link>
+							{mainNavLinks.map((link) => (
+								<Link
+									key={link.to}
+									to={link.to}
+									className='flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 transition-colors rounded-md dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-dark-border'
+								>
+									<link.icon className='w-4 h-4' />
+									{link.name}
+								</Link>
+							))}
 						</div>
 
 						{/* Mobile Home Link */}
@@ -57,8 +49,8 @@ export const Navbar = () => {
 							to='/'
 							className='flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 transition-colors rounded-md lg:hidden dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-dark-border'
 						>
-							<Home className='w-4 h-4' />
-							Ana Sayfa
+							<HomeIcon className='w-4 h-4' />
+							{mainNavLinks[0].name}
 						</Link>
 
 						{/* Desktop Menu */}

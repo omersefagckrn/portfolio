@@ -1,32 +1,35 @@
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { selectOrders, selectOrdersLoading, selectOrdersError, fetchOrders } from '../../store/features/authSlice';
+import { selectOrders, selectOrdersLoading, selectOrdersError, fetchOrders, selectUser, clearOrdersError } from '../../store/features/authSlice';
 import { format } from 'date-fns';
 import { tr } from 'date-fns/locale';
 import type { AppDispatch } from '../../store/store';
+import type { Order } from '../../types';
 import { Helmet } from 'react-helmet-async';
-
-interface Order {
-	id: string;
-	user_id: string;
-	package_id: string;
-	package_name: string;
-	total_amount: number;
-	payment_status: 'pending' | 'completed' | 'failed';
-	order_status: string;
-	created_at: string;
-	updated_at: string;
-}
+import { Navigate, useLocation } from 'react-router-dom';
 
 const ProfileOrders = () => {
 	const dispatch = useDispatch<AppDispatch>();
+	const user = useSelector(selectUser);
 	const orders = useSelector(selectOrders) as Order[];
 	const isLoading = useSelector(selectOrdersLoading);
 	const error = useSelector(selectOrdersError);
+	const location = useLocation();
 
 	useEffect(() => {
-		dispatch(fetchOrders());
-	}, [dispatch]);
+		if (user) {
+			dispatch(fetchOrders());
+		}
+		// Component unmount olduğunda hata mesajını temizle
+		return () => {
+			dispatch(clearOrdersError());
+		};
+	}, [dispatch, user]);
+
+	// Kullanıcı oturumu yoksa login sayfasına yönlendir
+	if (!user) {
+		return <Navigate to='/login' state={{ from: location }} replace />;
+	}
 
 	const getStatusColor = (status: string) => {
 		switch (status) {
@@ -69,7 +72,24 @@ const ProfileOrders = () => {
 				</Helmet>
 				<div className='p-6'>
 					<div className='flex flex-col items-center justify-center h-64'>
-						<p className='text-lg text-red-500'>{error}</p>
+						<div className='p-4 text-sm text-red-500 border-2 border-red-200 rounded-lg bg-red-50 dark:bg-red-500/10 dark:border-red-500/20'>
+							<div className='flex items-center gap-2'>
+								<svg xmlns='http://www.w3.org/2000/svg' className='w-5 h-5' viewBox='0 0 20 20' fill='currentColor'>
+									<path
+										fillRule='evenodd'
+										d='M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z'
+										clipRule='evenodd'
+									/>
+								</svg>
+								<span>{error}</span>
+							</div>
+						</div>
+						<button
+							onClick={() => dispatch(fetchOrders())}
+							className='px-4 py-2 mt-4 text-sm font-medium text-white transition-colors rounded-md bg-primary-500 hover:bg-primary-600 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2'
+						>
+							Tekrar Dene
+						</button>
 					</div>
 				</div>
 			</>
@@ -135,33 +155,41 @@ const ProfileOrders = () => {
 										key={order.id}
 										className='bg-white border-b dark:bg-dark-card dark:border-dark-border hover:bg-gray-50 dark:hover:bg-dark-hover'
 									>
-										<td className='px-6 py-4 font-medium text-gray-900 dark:text-white'>{order.id.slice(0, 8)}</td>
-										<td className='px-6 py-4'>{order.package_name}</td>
-										<td className='px-6 py-4'>{order.total_amount.toLocaleString('tr-TR')} ₺</td>
+										<td className='px-6 py-4 font-medium text-gray-900 dark:text-white'>
+											{order.id?.toString() || '-'}
+										</td>
+										<td className='px-6 py-4'>{order.package_name || '-'}</td>
+										<td className='px-6 py-4'>
+											{typeof order.amount === 'number' ? `${order.amount.toLocaleString('tr-TR')} ₺` : '-'}
+										</td>
 										<td className='px-6 py-4'>
 											<span
 												className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(
-													order.payment_status
+													order.payment_status || ''
 												)}`}
 											>
 												{order.payment_status === 'completed'
 													? 'Ödendi'
 													: order.payment_status === 'pending'
 													? 'Beklemede'
-													: 'Başarısız'}
+													: order.payment_status === 'failed'
+													? 'Başarısız'
+													: '-'}
 											</span>
 										</td>
 										<td className='px-6 py-4'>
 											<span
 												className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(
-													order.order_status
+													order.status || ''
 												)}`}
 											>
-												{order.order_status}
+												{order.status || '-'}
 											</span>
 										</td>
 										<td className='px-6 py-4'>
-											{format(new Date(order.created_at), 'dd MMMM yyyy HH:mm', { locale: tr })}
+											{order.created_at
+												? format(new Date(order.created_at), 'dd MMMM yyyy HH:mm', { locale: tr })
+												: '-'}
 										</td>
 									</tr>
 								))}

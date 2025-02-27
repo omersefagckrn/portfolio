@@ -2,21 +2,23 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { HelmetProvider } from 'react-helmet-async';
 import { Provider } from 'react-redux';
 import { store } from './store/store';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from './store/hooks';
 import { updateSystemTheme, setTheme, Theme } from './store/features/themeSlice';
 import { checkAuth, selectIsAuthenticated, selectIsLoading } from './store/features/authSlice';
-import { Login } from './pages/Login';
-import { Register } from './pages/Register';
-import { EmailConfirmation } from './pages/EmailConfirmation';
 import { Layout } from './components/Layout/Layout';
-import { Home } from './pages/Home';
 import { supabase } from './lib/supabase';
 import { ProfileLayout } from './components/Layout/ProfileLayout';
 import { Toaster } from 'react-hot-toast';
 import Profile from './pages/Profile/Profile';
 import ProfileEdit from './pages/Profile/ProfileEdit';
 import ProfileOrders from './pages/Profile/ProfileOrders';
+import WebApp from './pages/WebApp/WebApp';
+import MobileApp from './pages/MobileApp/MobileApp';
+import Home from './pages/Home/Home';
+import { Login } from './pages/Login/Login';
+import { Register } from './pages/Register/Register';
+import { EmailConfirmation } from './pages/Email/EmailConfirmation';
 
 interface RouteProps {
 	children: React.ReactNode;
@@ -24,41 +26,19 @@ interface RouteProps {
 
 const PublicRoute = ({ children }: RouteProps) => {
 	const isAuthenticated = useAppSelector(selectIsAuthenticated);
-	const isLoading = useAppSelector(selectIsLoading);
-
-	if (isLoading) {
-		return (
-			<div className='flex items-center justify-center min-h-screen'>
-				<div className='w-8 h-8 border-4 rounded-full border-primary-600 border-t-transparent animate-spin' />
-			</div>
-		);
-	}
-
-	if (isAuthenticated) {
-		return <Navigate to='/' replace />;
-	}
-
-	return children;
+	return isAuthenticated ? <Navigate to='/' replace /> : children;
 };
 
 const PrivateRoute = ({ children }: RouteProps) => {
 	const isAuthenticated = useAppSelector(selectIsAuthenticated);
-	const isLoading = useAppSelector(selectIsLoading);
-
-	if (isLoading) {
-		return (
-			<div className='flex items-center justify-center min-h-screen'>
-				<div className='w-8 h-8 border-4 rounded-full border-primary-600 border-t-transparent animate-spin' />
-			</div>
-		);
-	}
-
-	if (!isAuthenticated) {
-		return <Navigate to='/login' replace />;
-	}
-
-	return children;
+	return isAuthenticated ? children : <Navigate to='/login' replace />;
 };
+
+const LoadingSpinner = () => (
+	<div className='flex items-center justify-center min-h-screen bg-white dark:bg-dark-bg'>
+		<div className='w-8 h-8 border-4 rounded-full border-primary-600 border-t-transparent animate-spin' />
+	</div>
+);
 
 const ThemeInitializer = () => {
 	const dispatch = useAppDispatch();
@@ -85,15 +65,29 @@ const ThemeInitializer = () => {
 
 const AppContent = () => {
 	const dispatch = useAppDispatch();
+	const isLoading = useAppSelector(selectIsLoading);
+	const [isInitialized, setIsInitialized] = useState(false);
 
 	useEffect(() => {
-		dispatch(checkAuth());
+		const initAuth = async () => {
+			const {
+				data: { session }
+			} = await supabase.auth.getSession();
+			if (session?.user) {
+				await dispatch(checkAuth());
+			} else {
+				dispatch({ type: 'auth/check/fulfilled', payload: null });
+			}
+			setIsInitialized(true);
+		};
+
+		initAuth();
 
 		const {
 			data: { subscription }
 		} = supabase.auth.onAuthStateChange((_event, session) => {
 			if (session?.user) {
-				dispatch({ type: 'auth/check/fulfilled', payload: session.user });
+				dispatch(checkAuth());
 			} else {
 				dispatch({ type: 'auth/check/fulfilled', payload: null });
 			}
@@ -103,6 +97,10 @@ const AppContent = () => {
 			subscription.unsubscribe();
 		};
 	}, [dispatch]);
+
+	if (!isInitialized || isLoading) {
+		return <LoadingSpinner />;
+	}
 
 	return (
 		<Routes>
@@ -114,6 +112,23 @@ const AppContent = () => {
 					</Layout>
 				}
 			/>
+			<Route
+				path='/web-app'
+				element={
+					<Layout>
+						<WebApp />
+					</Layout>
+				}
+			/>
+			<Route
+				path='/mobile-app'
+				element={
+					<Layout>
+						<MobileApp />
+					</Layout>
+				}
+			/>
+
 			<Route
 				path='/login'
 				element={
@@ -138,6 +153,7 @@ const AppContent = () => {
 					</PublicRoute>
 				}
 			/>
+
 			<Route
 				path='/profile'
 				element={

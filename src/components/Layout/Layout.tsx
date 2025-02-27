@@ -1,8 +1,5 @@
 import { Navbar } from '../Navbar/Navbar';
-
-interface LayoutProps {
-	children: React.ReactNode;
-}
+import { LayoutProps } from '../../types';
 
 export const Layout = ({ children }: LayoutProps) => {
 	return (

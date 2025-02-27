@@ -1,12 +1,7 @@
-import { ComponentProps, forwardRef, useState } from 'react';
+import { forwardRef, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
 import { Eye, EyeOff } from 'lucide-react';
-
-interface InputProps extends Omit<ComponentProps<'input'>, 'className'> {
-	label?: string;
-	error?: string;
-	containerClassName?: string;
-}
+import { InputProps } from '../../types';
 
 export const Input = forwardRef<HTMLInputElement, InputProps>(({ label, error, containerClassName, id, type, ...props }, ref) => {
 	const [showPassword, setShowPassword] = useState(false);

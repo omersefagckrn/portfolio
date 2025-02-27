@@ -1,36 +1,24 @@
 import { Link, Outlet, useLocation, Navigate } from 'react-router-dom';
-import { User, Settings, ShoppingBag } from 'lucide-react';
 import { cn } from '../../utils/cn';
-import { useSelector } from 'react-redux';
-import { selectIsAuthenticated, selectUser } from '../../store/features/authSlice';
-
-const navigation = [
-	{
-		name: 'Profilim',
-		to: '/profile',
-		icon: User
-	},
-	{
-		name: 'Profilimi Düzenle',
-		to: '/profile/edit',
-		icon: Settings
-	},
-	{
-		name: 'Siparişlerim',
-		to: '/profile/orders',
-		icon: ShoppingBag
-	}
-];
+import { useSelector, useDispatch } from 'react-redux';
+import { selectIsAuthenticated, selectUser, logoutUser } from '../../store/features/authSlice';
+import { profileNavigation } from '../../constants';
+import { LogOut } from 'lucide-react';
+import type { AppDispatch } from '../../store/store';
 
 export const ProfileLayout = () => {
 	const location = useLocation();
+	const dispatch = useDispatch<AppDispatch>();
 	const isAuthenticated = useSelector(selectIsAuthenticated);
 	const user = useSelector(selectUser);
 
-	// Eğer kullanıcı giriş yapmamışsa, login sayfasına yönlendir
 	if (!isAuthenticated || !user) {
 		return <Navigate to='/login' state={{ from: location }} replace />;
 	}
+
+	const handleLogout = () => {
+		dispatch(logoutUser());
+	};
 
 	return (
 		<div className='container py-8 mx-auto'>
@@ -39,7 +27,7 @@ export const ProfileLayout = () => {
 				<div className='col-span-12 md:col-span-3'>
 					<nav className='overflow-hidden bg-white rounded-lg shadow-sm dark:bg-dark-card'>
 						<div className='p-2'>
-							{navigation.map((item) => {
+							{profileNavigation.map((item) => {
 								const isActive = location.pathname === item.to;
 								return (
 									<Link
@@ -57,6 +45,14 @@ export const ProfileLayout = () => {
 									</Link>
 								);
 							})}
+							<div className='h-px my-2 bg-gray-200 dark:bg-dark-border' />
+							<button
+								onClick={handleLogout}
+								className='flex items-center w-full gap-2 px-4 py-2 text-sm font-medium text-red-500 transition-colors rounded-md hover:bg-red-50 dark:hover:bg-red-500/10'
+							>
+								<LogOut className='w-4 h-4' />
+								Çıkış Yap
+							</button>
 						</div>
 					</nav>
 				</div>

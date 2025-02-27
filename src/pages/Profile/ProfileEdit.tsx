@@ -78,7 +78,7 @@ const ProfileEdit = () => {
 												<Field
 													name='first_name'
 													type='text'
-													className='w-full px-3 py-2 border rounded-lg dark:border-dark-border dark:bg-dark-background focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 focus:border-transparent'
+													className='w-full px-3 py-2 text-gray-900 border rounded-lg dark:text-white bg-gray-50 dark:bg-dark-border dark:border-dark-border focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 focus:border-transparent'
 												/>
 												{errors.first_name && touched.first_name && (
 													<p className='text-sm text-red-500'>{String(errors.first_name)}</p>
@@ -95,7 +95,7 @@ const ProfileEdit = () => {
 												<Field
 													name='last_name'
 													type='text'
-													className='w-full px-3 py-2 border rounded-lg dark:border-dark-border dark:bg-dark-background focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 focus:border-transparent'
+													className='w-full px-3 py-2 text-gray-900 border rounded-lg dark:text-white bg-gray-50 dark:bg-dark-border dark:border-dark-border focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 focus:border-transparent'
 												/>
 												{errors.last_name && touched.last_name && (
 													<p className='text-sm text-red-500'>{String(errors.last_name)}</p>
@@ -115,7 +115,7 @@ const ProfileEdit = () => {
 												<Field
 													name='company_name'
 													type='text'
-													className='w-full px-3 py-2 border rounded-lg dark:border-dark-border dark:bg-dark-background focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 focus:border-transparent'
+													className='w-full px-3 py-2 text-gray-900 border rounded-lg dark:text-white bg-gray-50 dark:bg-dark-border dark:border-dark-border focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 focus:border-transparent'
 												/>
 												{errors.company_name && touched.company_name && (
 													<p className='text-sm text-red-500'>{String(errors.company_name)}</p>
@@ -132,7 +132,7 @@ const ProfileEdit = () => {
 												<Field
 													name='tax_number'
 													type='text'
-													className='w-full px-3 py-2 border rounded-lg dark:border-dark-border dark:bg-dark-background focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 focus:border-transparent'
+													className='w-full px-3 py-2 text-gray-900 border rounded-lg dark:text-white bg-gray-50 dark:bg-dark-border dark:border-dark-border focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 focus:border-transparent'
 												/>
 												{errors.tax_number && touched.tax_number && (
 													<p className='text-sm text-red-500'>{String(errors.tax_number)}</p>
@@ -149,7 +149,7 @@ const ProfileEdit = () => {
 										<Field
 											name='phone'
 											type='tel'
-											className='w-full px-3 py-2 border rounded-lg dark:border-dark-border dark:bg-dark-background focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 focus:border-transparent'
+											className='w-full px-3 py-2 text-gray-900 border rounded-lg dark:text-white bg-gray-50 dark:bg-dark-border dark:border-dark-border focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 focus:border-transparent'
 										/>
 										{errors.phone && touched.phone && <p className='text-sm text-red-500'>{String(errors.phone)}</p>}
 									</div>
@@ -162,7 +162,7 @@ const ProfileEdit = () => {
 											name='address'
 											as='textarea'
 											rows={3}
-											className='w-full px-3 py-2 border rounded-lg dark:border-dark-border dark:bg-dark-background focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 focus:border-transparent'
+											className='w-full px-3 py-2 text-gray-900 border rounded-lg dark:text-white bg-gray-50 dark:bg-dark-border dark:border-dark-border focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 focus:border-transparent'
 										/>
 										{errors.address && touched.address && (
 											<p className='text-sm text-red-500'>{String(errors.address)}</p>

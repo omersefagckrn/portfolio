@@ -2,9 +2,9 @@ import { useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
-import { useAppSelector } from '../store/hooks';
-import { selectIsAuthenticated } from '../store/features/authSlice';
-import { Button } from '../components/Button/Button';
+import { useAppSelector } from '../../store/hooks';
+import { selectIsAuthenticated } from '../../store/features/authSlice';
+import { Button } from '../../components/Button/Button';
 
 export const EmailConfirmation = () => {
 	const navigate = useNavigate();

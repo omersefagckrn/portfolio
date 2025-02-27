@@ -2,49 +2,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { supabase } from '../../lib/supabase';
 import type { RootState } from '../store';
 import type { User } from '@supabase/supabase-js';
-
-interface Order {
-	id: string;
-	user_id: string;
-	package_id: string;
-	package_name: string;
-	total_amount: number;
-	payment_status: 'pending' | 'completed' | 'failed';
-	order_status: string;
-	created_at: string;
-	updated_at: string;
-}
-
-interface AuthState {
-	user: User | null;
-	isAuthenticated: boolean;
-	isLoading: boolean;
-	error: string | null;
-	orders: Order[];
-	ordersLoading: boolean;
-	ordersError: string | null;
-}
-
-interface RegisterUserData {
-	email: string;
-	password: string;
-	user_type: 'bireysel' | 'kurumsal';
-	first_name?: string;
-	last_name?: string;
-	company_name?: string;
-	tax_number?: string;
-	phone: string;
-	address: string;
-}
-
-interface UpdateProfileData {
-	first_name?: string;
-	last_name?: string;
-	company_name?: string;
-	tax_number?: string;
-	phone: string;
-	address: string;
-}
+import type { RegisterUserData, UpdateProfileData, AuthState } from '../../types';
 
 const initialState: AuthState = {
 	user: null,
@@ -91,18 +49,11 @@ export const checkAuth = createAsyncThunk('auth/check', async (_, { rejectWithVa
 			return rejectWithValue(translateAuthError(sessionError.message));
 		}
 
-		if (!session) return null;
-
-		const { data: userData, error: userError } = await supabase.from('users').select('*').eq('id', session.user.id).single();
-
-		if (userError) {
-			return rejectWithValue(translateAuthError(userError.message));
+		if (!session?.user) {
+			return null;
 		}
 
-		return {
-			...session.user,
-			user_data: userData
-		};
+		return session.user;
 	} catch (error) {
 		if (error instanceof Error) {
 			return rejectWithValue(translateAuthError(error.message));
@@ -266,25 +217,58 @@ export const updateProfile = createAsyncThunk('auth/updateProfile', async (data:
 	}
 });
 
-export const fetchOrders = createAsyncThunk('auth/fetchOrders', async (_, { getState, rejectWithValue }) => {
+export const fetchOrders = createAsyncThunk('auth/fetchOrders', async (_, { rejectWithValue }) => {
 	try {
-		const state = getState() as RootState;
-		const userId = state.auth.user?.id;
+		const {
+			data: { session },
+			error: sessionError
+		} = await supabase.auth.getSession();
 
-		if (!userId) {
-			throw new Error('Kullanıcı oturumu bulunamadı');
+		if (sessionError) {
+			console.error('Session Error:', sessionError);
+			return rejectWithValue('Oturum hatası: Lütfen tekrar giriş yapın');
 		}
 
-		const { data, error } = await supabase.from('orders').select('*').eq('user_id', userId).order('created_at', { ascending: false });
+		if (!session) {
+			return rejectWithValue('Aktif oturum bulunamadı');
+		}
 
-		if (error) throw error;
+		const userEmail = session.user.email;
 
-		return data || [];
+		if (!userEmail) {
+			return rejectWithValue('Kullanıcı email adresi bulunamadı');
+		}
+
+		const { data, error } = await supabase.from('orders').select('*').eq('user_email', userEmail).order('created_at', { ascending: false });
+
+		if (error) {
+			console.error('Orders Error:', error);
+			if (error.message.includes('JWT')) {
+				return rejectWithValue('Oturum süresi dolmuş, lütfen tekrar giriş yapın');
+			}
+			return rejectWithValue(translateAuthError(error.message));
+		}
+
+		const transformedOrders =
+			data?.map((order) => ({
+				id: order.id,
+				user_email: order.user_email,
+				package_id: order.package_id,
+				package_name: order.package_name || 'Bilinmeyen Paket',
+				amount: order.amount || 0,
+				status: order.status || 'Beklemede',
+				payment_status: order.payment_status || 'pending',
+				created_at: order.created_at,
+				updated_at: order.updated_at
+			})) || [];
+
+		return transformedOrders;
 	} catch (error) {
+		console.error('Fetch Orders Error:', error);
 		if (error instanceof Error) {
 			return rejectWithValue(translateAuthError(error.message));
 		}
-		return rejectWithValue('Siparişler yüklenirken bir hata oluştu');
+		return rejectWithValue('Siparişler yüklenirken beklenmeyen bir hata oluştu');
 	}
 });
 
@@ -307,13 +291,14 @@ const authSlice = createSlice({
 		})
 			.addCase(checkAuth.fulfilled, (state, action) => {
 				state.isLoading = false;
-				state.user = action.payload as User | null;
+				state.user = action.payload;
 				state.isAuthenticated = !!action.payload;
 				state.error = null;
 			})
 			.addCase(checkAuth.rejected, (state, action) => {
 				state.isLoading = false;
 				state.user = null;
+				state.isAuthenticated = false;
 				state.error = (action.payload as string) || 'Bir hata oluştu';
 			});
 

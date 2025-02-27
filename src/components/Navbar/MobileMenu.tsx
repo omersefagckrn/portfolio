@@ -1,14 +1,10 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '../Button/Button';
-import { X, LogOut, User, Settings, Home, Smartphone, Globe } from 'lucide-react';
+import { X, LogOut, User, Settings } from 'lucide-react';
 import { Link } from 'react-router-dom';
-
-interface MobileMenuProps {
-	isOpen: boolean;
-	onClose: () => void;
-	isAuthenticated: boolean;
-	onLogout: () => void;
-}
+import { Dialog } from '@headlessui/react';
+import { MobileMenuProps } from '../../types';
+import { mainNavLinks, profileNavigation } from '../../constants';
 
 export const MobileMenu = ({ isOpen, onClose, isAuthenticated, onLogout }: MobileMenuProps) => {
 	return (
@@ -33,32 +29,17 @@ export const MobileMenu = ({ isOpen, onClose, isAuthenticated, onLogout }: Mobil
 
 						{/* Navigation Links */}
 						<div className='flex flex-col flex-grow p-4 space-y-4'>
-							<Link
-								to='/'
-								onClick={onClose}
-								className='flex items-center w-full gap-2 px-4 py-3 text-sm font-medium text-gray-700 transition-colors rounded-lg dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-dark-border'
-							>
-								<Home className='w-4 h-4' />
-								Ana Sayfa
-							</Link>
-
-							<Link
-								to='/mobile-app'
-								onClick={onClose}
-								className='flex items-center w-full gap-2 px-4 py-3 text-sm font-medium text-gray-700 transition-colors rounded-lg dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-dark-border'
-							>
-								<Smartphone className='w-4 h-4' />
-								Mobil Uygulama
-							</Link>
-
-							<Link
-								to='/web-app'
-								onClick={onClose}
-								className='flex items-center w-full gap-2 px-4 py-3 text-sm font-medium text-gray-700 transition-colors rounded-lg dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-dark-border'
-							>
-								<Globe className='w-4 h-4' />
-								Web Uygulama
-							</Link>
+							{mainNavLinks.map((link) => (
+								<Link
+									key={link.to}
+									to={link.to}
+									onClick={onClose}
+									className='flex items-center w-full gap-2 px-4 py-3 text-sm font-medium text-gray-700 transition-colors rounded-lg dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-dark-border'
+								>
+									<link.icon className='w-4 h-4' />
+									{link.name}
+								</Link>
+							))}
 
 							{!isAuthenticated ? (
 								<>
@@ -71,22 +52,17 @@ export const MobileMenu = ({ isOpen, onClose, isAuthenticated, onLogout }: Mobil
 								</>
 							) : (
 								<>
-									<Link
-										to='/profile'
-										onClick={onClose}
-										className='flex items-center w-full gap-2 px-4 py-3 text-sm font-medium text-gray-700 transition-colors rounded-lg dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-dark-border'
-									>
-										<User className='w-4 h-4' />
-										Profilim
-									</Link>
-									<Link
-										to='/profile/edit'
-										onClick={onClose}
-										className='flex items-center w-full gap-2 px-4 py-3 text-sm font-medium text-gray-700 transition-colors rounded-lg dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-dark-border'
-									>
-										<Settings className='w-4 h-4' />
-										Profilimi Düzenle
-									</Link>
+									{profileNavigation.map((item) => (
+										<Link
+											key={item.to}
+											to={item.to}
+											onClick={onClose}
+											className='flex items-center w-full gap-2 px-4 py-3 text-sm font-medium text-gray-700 transition-colors rounded-lg dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-dark-border'
+										>
+											<item.icon className='w-4 h-4' />
+											{item.name}
+										</Link>
+									))}
 									<button
 										onClick={() => {
 											onLogout();
