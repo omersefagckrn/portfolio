@@ -1,0 +1,14 @@
+@import url('https://fonts.googleapis.com/css2?family=Finlandica&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,* {
+  font-family: 'Finlandica', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  scroll-behavior: smooth;
+  user-select: none;
+}
