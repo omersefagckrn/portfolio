@@ -6,17 +6,11 @@ import { variants, sizes, spinnerSizes } from '../../constants';
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(({ variant = 'primary', size = 'md', to, isFullWidth = false, isLoading = false, disabled, onClick, children, ...props }, ref) => {
 	const baseClassName = [
-		// Base styles
 		'inline-flex items-center justify-center rounded-lg font-medium transition-all duration-200',
-		// Focus styles
 		variant !== 'text' ? 'focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 dark:focus:ring-offset-dark-bg' : 'focus:outline-none',
-		// Disabled styles
 		'disabled:cursor-not-allowed',
-		// Variant styles
 		variants[variant],
-		// Size styles
 		sizes[size],
-		// Width styles
 		isFullWidth ? 'w-full' : ''
 	]
 		.filter(Boolean)

@@ -4,14 +4,17 @@ import type { RootState } from '../store';
 import type { User } from '@supabase/supabase-js';
 import type { RegisterUserData, UpdateProfileData, AuthState } from '../../types';
 
+export const paymentInfo = {
+	bankName: 'Kuveyt Türk',
+	accountHolder: 'Ömer Sefa Güçkıran',
+	iban: 'TR490020500009668782200001'
+};
+
 const initialState: AuthState = {
 	user: null,
 	isAuthenticated: false,
 	isLoading: false,
-	error: null,
-	orders: [],
-	ordersLoading: false,
-	ordersError: null
+	error: null
 };
 
 const translateAuthError = (error: string): string => {
@@ -217,61 +220,6 @@ export const updateProfile = createAsyncThunk('auth/updateProfile', async (data:
 	}
 });
 
-export const fetchOrders = createAsyncThunk('auth/fetchOrders', async (_, { rejectWithValue }) => {
-	try {
-		const {
-			data: { session },
-			error: sessionError
-		} = await supabase.auth.getSession();
-
-		if (sessionError) {
-			console.error('Session Error:', sessionError);
-			return rejectWithValue('Oturum hatası: Lütfen tekrar giriş yapın');
-		}
-
-		if (!session) {
-			return rejectWithValue('Aktif oturum bulunamadı');
-		}
-
-		const userEmail = session.user.email;
-
-		if (!userEmail) {
-			return rejectWithValue('Kullanıcı email adresi bulunamadı');
-		}
-
-		const { data, error } = await supabase.from('orders').select('*').eq('user_email', userEmail).order('created_at', { ascending: false });
-
-		if (error) {
-			console.error('Orders Error:', error);
-			if (error.message.includes('JWT')) {
-				return rejectWithValue('Oturum süresi dolmuş, lütfen tekrar giriş yapın');
-			}
-			return rejectWithValue(translateAuthError(error.message));
-		}
-
-		const transformedOrders =
-			data?.map((order) => ({
-				id: order.id,
-				user_email: order.user_email,
-				package_id: order.package_id,
-				package_name: order.package_name || 'Bilinmeyen Paket',
-				amount: order.amount || 0,
-				status: order.status || 'Beklemede',
-				payment_status: order.payment_status || 'pending',
-				created_at: order.created_at,
-				updated_at: order.updated_at
-			})) || [];
-
-		return transformedOrders;
-	} catch (error) {
-		console.error('Fetch Orders Error:', error);
-		if (error instanceof Error) {
-			return rejectWithValue(translateAuthError(error.message));
-		}
-		return rejectWithValue('Siparişler yüklenirken beklenmeyen bir hata oluştu');
-	}
-});
-
 export const forgotPassword = createAsyncThunk('auth/forgotPassword', async (email: string, { rejectWithValue }) => {
 	try {
 		// Rate limiting kontrolü
@@ -367,9 +315,6 @@ const authSlice = createSlice({
 	reducers: {
 		clearError: (state) => {
 			state.error = null;
-		},
-		clearOrdersError: (state) => {
-			state.ordersError = null;
 		}
 	},
 	extraReducers: (builder) => {
@@ -469,21 +414,6 @@ const authSlice = createSlice({
 				state.error = action.payload as string;
 			});
 
-		// Fetch Orders
-		builder.addCase(fetchOrders.pending, (state) => {
-			state.ordersLoading = true;
-			state.ordersError = null;
-		})
-			.addCase(fetchOrders.fulfilled, (state, action) => {
-				state.ordersLoading = false;
-				state.orders = action.payload;
-				state.ordersError = null;
-			})
-			.addCase(fetchOrders.rejected, (state, action) => {
-				state.ordersLoading = false;
-				state.ordersError = action.payload as string;
-			});
-
 		// Forgot Password
 		builder.addCase(forgotPassword.pending, (state) => {
 			state.isLoading = true;
@@ -514,14 +444,12 @@ const authSlice = createSlice({
 	}
 });
 
-export const { clearError, clearOrdersError } = authSlice.actions;
+export const { clearError } = authSlice.actions;
 
 export const selectUser = (state: RootState) => state.auth.user;
 export const selectIsAuthenticated = (state: RootState) => state.auth.isAuthenticated;
 export const selectIsLoading = (state: RootState) => state.auth.isLoading;
 export const selectError = (state: RootState) => state.auth.error;
-export const selectOrders = (state: RootState) => state.auth.orders;
-export const selectOrdersLoading = (state: RootState) => state.auth.ordersLoading;
-export const selectOrdersError = (state: RootState) => state.auth.ordersError;
+export const selectPaymentInfo = () => paymentInfo;
 
 export default authSlice.reducer;

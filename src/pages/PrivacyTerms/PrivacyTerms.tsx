@@ -1,104 +1,163 @@
+import { motion } from 'framer-motion';
+import { Shield, Lock, Eye, Cookie, Mail, RefreshCw } from 'lucide-react';
+import { Helmet } from 'react-helmet-async';
+
 const PrivacyTerms = () => {
-	return (
-		<div className='container max-w-4xl py-8 mx-auto'>
-			<div className='space-y-12'>
-				<section>
-					<h1 className='mb-4 text-3xl font-bold text-gray-900 dark:text-white'>Gizlilik ve Kullanım Koşulları</h1>
-					<p className='mb-4 text-gray-600 underline dark:text-gray-400'>Son güncelleme: {new Date().toLocaleDateString('tr-TR')}</p>
-					<div className='text-black max-w-none dark:text-white/70'>
-						<p>
-							Bu gizlilik politikası ve kullanım koşulları, portfolio websitemizin nasıl çalıştığını ve verilerinizi nasıl kullandığımızı
-							açıklar. Sitemizi kullanarak bu koşulları kabul etmiş sayılırsınız.
-						</p>
-					</div>
-				</section>
+	// Animasyon varyantları
+	const animations = {
+		container: {
+			hidden: { opacity: 0 },
+			visible: {
+				opacity: 1,
+				transition: {
+					staggerChildren: 0.1,
+					delayChildren: 0.2
+				}
+			}
+		},
+		item: {
+			hidden: { opacity: 0, y: 20 },
+			visible: {
+				opacity: 1,
+				y: 0,
+				transition: {
+					duration: 0.5,
+					ease: 'easeOut'
+				}
+			}
+		},
+		title: {
+			hidden: { opacity: 0, x: -20 },
+			visible: {
+				opacity: 1,
+				x: 0,
+				transition: {
+					duration: 0.6,
+					ease: 'easeOut'
+				}
+			}
+		}
+	};
 
-				<section>
-					<h2 className='mb-4 text-2xl font-semibold text-gray-900 dark:text-white'>1. Hizmetlerimiz</h2>
-					<div className='text-black max-w-none dark:text-white/70'>
-						<p>Portfolio websitemiz, profesyonel hizmetlerimizi ve projelerimizi sergilediğimiz bir platformdur. Sitemiz üzerinden:</p>
-						<ul>
-							<li>Proje portföyümüzü inceleyebilir</li>
-							<li>Hizmetlerimiz hakkında bilgi alabilir</li>
-							<li>İletişim kurabilir</li>
-							<li>Ödeme işlemlerini güvenle gerçekleştirebilirsiniz</li>
-						</ul>
-					</div>
-				</section>
-
-				<section>
-					<h2 className='mb-4 text-2xl font-semibold text-gray-900 dark:text-white'>2. Ödeme İşlemleri ve Güvenlik</h2>
-					<div className='text-black max-w-none dark:text-white/70'>
-						<p>
-							Sitemizde kullanılan sanal POS sistemi, güvenli ödeme işlemleri için endüstri standardı SSL şifreleme kullanmaktadır. Ödeme
-							işlemleriniz sırasında:
-						</p>
-						<ul>
-							<li>Tüm işlemler SSL sertifikası ile şifrelenir</li>
-							<li>Kredi kartı bilgileriniz sistemimizde saklanmaz</li>
-							<li>3D Secure ile güvenli ödeme imkanı sunulur</li>
-							<li>PCI DSS standartlarına uygun altyapı kullanılır</li>
-						</ul>
-					</div>
-				</section>
-
-				<section>
-					<h2 className='mb-4 text-2xl font-semibold text-gray-900 dark:text-white'>3. Veri Toplama ve Kullanımı</h2>
-					<div className='text-black max-w-none dark:text-white/70'>
-						<p>Sitemizi kullanırken aşağıdaki veriler toplanabilir:</p>
-						<ul>
-							<li>İletişim bilgileri (ad, e-posta, telefon)</li>
-							<li>Kullanım istatistikleri ve tercihler</li>
-							<li>Çerezler aracılığıyla toplanan veriler</li>
-							<li>Ödeme işlemleri için gerekli bilgiler</li>
-						</ul>
-						<p>Toplanan veriler şu amaçlarla kullanılır:</p>
-						<ul>
-							<li>Hizmet kalitesini iyileştirmek</li>
-							<li>Güvenliği sağlamak</li>
-							<li>Yasal yükümlülükleri yerine getirmek</li>
-							<li>İletişimi sürdürmek</li>
-						</ul>
-					</div>
-				</section>
-
-				<section>
-					<h2 className='mb-4 text-2xl font-semibold text-gray-900 dark:text-white'>4. Çerezler ve İzleme</h2>
-					<div className='text-black max-w-none dark:text-white/70'>
-						<p>Sitemiz, kullanıcı deneyimini iyileştirmek için çerezler kullanır. Çerezler şu amaçlarla kullanılır:</p>
-						<ul>
-							<li>Oturum yönetimi</li>
-							<li>Tercih hatırlama</li>
-							<li>Analitik veriler toplama</li>
-							<li>Güvenlik önlemleri</li>
-						</ul>
-					</div>
-				</section>
-
-				<section>
-					<h2 className='mb-4 text-2xl font-semibold text-gray-900 dark:text-white'>5. İletişim ve Destek</h2>
-					<div className='text-black max-w-none dark:text-white/70'>
-						<p>Gizlilik politikası ve kullanım koşulları hakkında sorularınız için:</p>
-						<ul>
-							<li>E-posta: dev.omersefaguc@gmail.com</li>
-							<li>Telefon: +90 (507) 845 51 83</li>
-							<li>Adres: İstanbul, Türkiye</li>
-						</ul>
-						<p>Bize ulaşabilir ve detaylı bilgi alabilirsiniz.</p>
-					</div>
-				</section>
-
-				<section>
-					<h2 className='mb-4 text-2xl font-semibold text-gray-900 dark:text-white'>6. Değişiklikler</h2>
-					<div className='text-black max-w-none dark:text-white/70'>
-						<p>
-							Bu gizlilik politikası ve kullanım koşulları, önceden bildirim yapılmaksızın güncellenebilir. Güncellemeler sitemizde yayınlandığı
-							tarihten itibaren geçerli olur. Düzenli olarak bu sayfayı kontrol etmenizi öneririz.
-						</p>
-					</div>
-				</section>
+	// Bölüm bileşeni
+	const Section = ({ title, icon, children, iconColor = 'text-primary-500' }: { title: string; icon: React.ReactNode; children: React.ReactNode; iconColor?: string }) => (
+		<motion.section
+			className='p-6 bg-white border border-gray-100 shadow-sm rounded-xl dark:bg-gray-800/50 dark:border-gray-700'
+			variants={animations.item}
+			whileHover={{ y: -5, transition: { duration: 0.2 } }}
+		>
+			<div className='flex items-center gap-4 mb-4'>
+				<div className={`p-3 rounded-full bg-gray-100/80 dark:bg-gray-700/50 ${iconColor}`}>{icon}</div>
+				<h2 className='text-xl font-semibold text-gray-900 dark:text-white'>{title}</h2>
 			</div>
-		</div>
+			<div className='space-y-3 text-gray-600 dark:text-gray-300'>{children}</div>
+		</motion.section>
+	);
+
+	// Liste öğesi bileşeni
+	const ListItem = ({ children }: { children: React.ReactNode }) => (
+		<li className='flex items-start'>
+			<span className='inline-block w-1.5 h-1.5 mt-2 mr-2 rounded-full bg-primary-500/70'></span>
+			{children}
+		</li>
+	);
+
+	return (
+		<>
+			<Helmet>
+				<title>Gizlilik ve Kullanım Koşulları</title>
+				<meta name='description' content='Portfolio websitemizin gizlilik politikası ve kullanım koşulları hakkında bilgi alın.' />
+			</Helmet>
+
+			<div className='py-12 dark:bg-dark-bg'>
+				<div className='container max-w-4xl px-4 mx-auto'>
+					<motion.div className='space-y-8' initial='hidden' animate='visible' variants={animations.container}>
+						<motion.div className='mb-12 text-center' variants={animations.title}>
+							<h1 className='mb-3 text-3xl font-bold text-gray-900 dark:text-white'>Gizlilik ve Kullanım Koşulları</h1>
+							<p className='inline-block px-4 py-1 text-sm text-gray-600 bg-gray-100 rounded-full dark:text-gray-400 dark:bg-gray-800'>
+								Son güncelleme: {new Date().toLocaleDateString('tr-TR')}
+							</p>
+							<div className='max-w-2xl mx-auto mt-6 text-gray-600 dark:text-gray-300'>
+								<p>
+									Bu gizlilik politikası ve kullanım koşulları, portfolio websitemizin nasıl çalıştığını ve verilerinizi nasıl
+									kullandığımızı açıklar. Sitemizi kullanarak bu koşulları kabul etmiş sayılırsınız.
+								</p>
+							</div>
+						</motion.div>
+
+						<Section title='Hizmetlerimiz' icon={<Shield size={24} />}>
+							<p>Portfolio websitemiz, profesyonel hizmetlerimizi ve projelerimizi sergilediğimiz bir platformdur. Sitemiz üzerinden:</p>
+							<ul className='mt-3 space-y-2'>
+								<ListItem>Proje portföyümüzü inceleyebilir</ListItem>
+								<ListItem>Hizmetlerimiz hakkında bilgi alabilir</ListItem>
+								<ListItem>İletişim kurabilir</ListItem>
+								<ListItem>Ödeme işlemlerini güvenle gerçekleştirebilirsiniz</ListItem>
+							</ul>
+						</Section>
+
+						<Section title='Ödeme İşlemleri ve Güvenlik' icon={<Lock size={24} />} iconColor='text-green-500'>
+							<p>Sitemizde paket satın alımları için banka havalesi/EFT yöntemi kullanılmaktadır. Ödeme işlemleriniz sırasında:</p>
+							<ul className='mt-3 space-y-2'>
+								<ListItem>Banka hesap bilgileri profil sayfanızda güvenli şekilde sunulur</ListItem>
+								<ListItem>Ödeme bilgileriniz şifreli bağlantı üzerinden iletilir</ListItem>
+								<ListItem>Havale/EFT açıklamasına email adresinizi ve paket adını yazmanız önemlidir</ListItem>
+								<ListItem>Ödeme onayı manuel olarak kontrol edilir ve hızlıca işleme alınır</ListItem>
+							</ul>
+						</Section>
+
+						<Section title='Veri Toplama ve Kullanımı' icon={<Eye size={24} />} iconColor='text-blue-500'>
+							<p>Sitemizi kullanırken aşağıdaki veriler toplanabilir:</p>
+							<ul className='mt-3 space-y-2'>
+								<ListItem>İletişim bilgileri (ad, e-posta, telefon)</ListItem>
+								<ListItem>Kullanım istatistikleri ve tercihler</ListItem>
+								<ListItem>Çerezler aracılığıyla toplanan veriler</ListItem>
+								<ListItem>Ödeme işlemleri için gerekli bilgiler</ListItem>
+							</ul>
+							<p className='mt-4'>Toplanan veriler şu amaçlarla kullanılır:</p>
+							<ul className='mt-3 space-y-2'>
+								<ListItem>Hizmet kalitesini iyileştirmek</ListItem>
+								<ListItem>Güvenliği sağlamak</ListItem>
+								<ListItem>Yasal yükümlülükleri yerine getirmek</ListItem>
+								<ListItem>İletişimi sürdürmek</ListItem>
+							</ul>
+						</Section>
+
+						<Section title='Çerezler ve İzleme' icon={<Cookie size={24} />} iconColor='text-amber-500'>
+							<p>Sitemiz, kullanıcı deneyimini iyileştirmek için çerezler kullanır. Çerezler şu amaçlarla kullanılır:</p>
+							<ul className='mt-3 space-y-2'>
+								<ListItem>Oturum yönetimi</ListItem>
+								<ListItem>Tercih hatırlama</ListItem>
+								<ListItem>Analitik veriler toplama</ListItem>
+								<ListItem>Güvenlik önlemleri</ListItem>
+							</ul>
+						</Section>
+
+						<Section title='İletişim ve Destek' icon={<Mail size={24} />} iconColor='text-purple-500'>
+							<p>Gizlilik politikası ve kullanım koşulları hakkında sorularınız için:</p>
+							<ul className='mt-3 space-y-2'>
+								<ListItem>
+									<span className='font-medium'>E-posta:</span> dev.omersefaguc@gmail.com
+								</ListItem>
+								<ListItem>
+									<span className='font-medium'>Telefon:</span> +90 (507) 845 51 83
+								</ListItem>
+								<ListItem>
+									<span className='font-medium'>Adres:</span> İstanbul, Türkiye
+								</ListItem>
+							</ul>
+							<p className='mt-4'>Bize ulaşabilir ve detaylı bilgi alabilirsiniz.</p>
+						</Section>
+
+						<Section title='Değişiklikler' icon={<RefreshCw size={24} />} iconColor='text-red-500'>
+							<p>
+								Bu gizlilik politikası ve kullanım koşulları, önceden bildirim yapılmaksızın güncellenebilir. Güncellemeler sitemizde
+								yayınlandığı tarihten itibaren geçerli olur. Düzenli olarak bu sayfayı kontrol etmenizi öneririz.
+							</p>
+						</Section>
+					</motion.div>
+				</div>
+			</div>
+		</>
 	);
 };
 

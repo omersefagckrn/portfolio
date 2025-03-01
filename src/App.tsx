@@ -10,7 +10,10 @@ import { Layout } from './components/Layout/Layout';
 import { supabase } from './lib/supabase';
 import { ProfileLayout } from './components/Layout/ProfileLayout';
 import { Toaster } from 'react-hot-toast';
-import { Home, WebApp, MobileApp, Login, Register, EmailConfirmation, ForgotPassword, ResetPassword, Profile, ProfileEdit, ProfileOrders, PrivacyTerms } from './pages';
+import { Home, WebApp, MobileApp, Login, Register, EmailConfirmation, ForgotPassword, ResetPassword, Profile, ProfileEdit, Payment, PrivacyTerms } from './pages';
+import { Cookie, MessageCircle } from 'lucide-react';
+import FloatingMenu from './components/FloatingMenu/FloatingMenu';
+import CookiePolicy from './components/CookiePolicy/CookiePolicy';
 
 interface RouteProps {
 	children: React.ReactNode;
@@ -167,7 +170,7 @@ const AppContent = () => {
 			>
 				<Route index element={<Profile />} />
 				<Route path='edit' element={<ProfileEdit />} />
-				<Route path='orders' element={<ProfileOrders />} />
+				<Route path='payment' element={<Payment />} />
 			</Route>
 			<Route
 				path='/privacy-terms'
@@ -182,12 +185,33 @@ const AppContent = () => {
 };
 
 const App = () => {
+	const [isCookiePolicyOpen, setIsCookiePolicyOpen] = useState(false);
+
+	const floatingMenuItems = [
+		{
+			icon: <Cookie size={20} />,
+			label: 'Çerez Politikası',
+			onClick: () => {
+				setIsCookiePolicyOpen(true);
+			}
+		},
+		{
+			icon: <MessageCircle size={20} />,
+			label: 'WhatsApp',
+			onClick: () => {
+				window.open('https://wa.me/905078455183', '_blank');
+			}
+		}
+	];
+
 	return (
 		<Provider store={store}>
 			<Router>
 				<HelmetProvider>
 					<ThemeInitializer />
 					<AppContent />
+					<FloatingMenu items={floatingMenuItems} />
+					<CookiePolicy isOpen={isCookiePolicyOpen} onClose={() => setIsCookiePolicyOpen(false)} />
 					<Toaster
 						position='top-right'
 						toastOptions={{

@@ -9,5 +9,5 @@ export { default as ForgotPassword } from './ForgotPassword/ForgotPassword';
 export { default as ResetPassword } from './ResetPassword/ResetPassword';
 export { default as Profile } from './Profile/Profile';
 export { default as ProfileEdit } from './Profile/ProfileEdit';
-export { default as ProfileOrders } from './Profile/ProfileOrders';
+export { default as Payment } from './Payment/Payment';
 export { default as PrivacyTerms } from './PrivacyTerms/PrivacyTerms';

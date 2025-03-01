@@ -87,7 +87,6 @@ const Register = () => {
 				<link rel='canonical' href={window.location.href} />
 			</Helmet>
 			<div className='flex min-h-screen bg-gray-50 dark:bg-dark-bg'>
-				{/* Left Side - Form */}
 				<div className='relative flex items-center justify-center w-full p-8 lg:w-1/2'>
 					<div className='absolute z-10 top-4 left-4'>
 						<Link
@@ -286,20 +285,13 @@ const Register = () => {
 									{...formik.getFieldProps('terms')}
 									className='mt-0.5 w-4 h-4 border rounded text-primary-600 focus:ring-primary-500 dark:bg-dark-bg dark:border-dark-border'
 								/>
-								<div className='text-sm text-gray-600 dark:text-gray-400'>
+								<div className='text-sm text-gray-600 dark:text-gray-400 hover:underline'>
 									<div className='flex flex-wrap items-center gap-x-1.5 gap-y-1'>
 										<Link
 											to='/privacy-terms'
 											className='font-medium transition-colors text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300'
 										>
-											Kullanım Koşulları
-										</Link>
-										<span>ve</span>
-										<Link
-											to='/privacy-terms'
-											className='font-medium transition-colors text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300'
-										>
-											Gizlilik Politikası
+											Kullanım Koşulları ve Gizlilik Politikası
 										</Link>
 									</div>
 								</div>
@@ -312,7 +304,6 @@ const Register = () => {
 						</motion.form>
 					</div>
 				</div>
-				{/* Right Side - Image */}
 				<ColoredWall title='Hızlıca kayıt olun' description='Hesabınızı oluşturarak bizlerle birlikte projelerinize yön verin.' />
 			</div>
 		</>

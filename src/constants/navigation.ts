@@ -1,4 +1,4 @@
-import { Home, Smartphone, Globe, User, Settings, ShoppingBag } from 'lucide-react';
+import { Home, Smartphone, Globe, User, Settings, CreditCard } from 'lucide-react';
 
 export const mainNavLinks = [
 	{
@@ -30,8 +30,8 @@ export const profileNavigation = [
 		icon: Settings
 	},
 	{
-		name: 'Siparişlerim',
-		to: '/profile/orders',
-		icon: ShoppingBag
+		name: 'Ödeme Bilgileri',
+		to: '/profile/payment',
+		icon: CreditCard
 	}
 ];

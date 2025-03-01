@@ -79,10 +79,8 @@ const Login = () => {
 				<link rel='canonical' href={window.location.href} />
 			</Helmet>
 			<div className='flex min-h-screen bg-gray-50 dark:bg-dark-bg'>
-				{/* Left Side - Image */}
 				<ColoredWall title='Tekrar Hoş Geldiniz' description='Hesabınıza giriş yaparak kaldığınız yerden devam edin.' />
 
-				{/* Right Side - Form */}
 				<div className='relative flex items-center justify-center w-full p-8 lg:w-1/2'>
 					<div className='absolute z-10 top-4 left-4'>
 						<Link

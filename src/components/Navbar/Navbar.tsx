@@ -30,7 +30,6 @@ export const Navbar = () => {
 			<nav className='fixed top-0 left-0 right-0 z-40 bg-white border-b-2 dark:border-none dark:bg-dark-bg'>
 				<div className='container mx-auto'>
 					<div className='flex items-center justify-between h-16'>
-						{/* Navigation Links */}
 						<div className='hidden lg:flex lg:items-center lg:gap-2'>
 							{mainNavLinks.map((link) => (
 								<Link
@@ -44,7 +43,6 @@ export const Navbar = () => {
 							))}
 						</div>
 
-						{/* Mobile Home Link */}
 						<Link
 							to='/'
 							className='flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 transition-colors rounded-md lg:hidden dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-dark-border'
@@ -53,7 +51,6 @@ export const Navbar = () => {
 							{mainNavLinks[0].name}
 						</Link>
 
-						{/* Desktop Menu */}
 						<div className='items-center hidden md:flex md:gap-4'>
 							{!isAuthenticated ? (
 								<div className='flex items-center gap-2'>
@@ -77,7 +74,6 @@ export const Navbar = () => {
 							</button>
 						</div>
 
-						{/* Mobile Menu Button */}
 						<div className='flex items-center space-x-4 md:hidden'>
 							<button
 								onClick={() => dispatch(toggleTheme())}
@@ -96,7 +92,6 @@ export const Navbar = () => {
 				</div>
 			</nav>
 
-			{/* Mobile Menu */}
 			<MobileMenu isOpen={isMobileMenuOpen} onClose={() => setIsMobileMenuOpen(false)} isAuthenticated={isAuthenticated} onLogout={handleLogout} />
 		</>
 	);

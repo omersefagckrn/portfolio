@@ -1,6 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { Button } from '../Button/Button';
-import { X, LogOut } from 'lucide-react';
+import { X, LogOut, LogIn, UserPlus } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { MobileMenuProps } from '../../types';
 import { mainNavLinks, profileNavigation } from '../../constants';
@@ -16,7 +15,6 @@ export const MobileMenu = ({ isOpen, onClose, isAuthenticated, onLogout }: Mobil
 					className='fixed inset-0 z-50 bg-white/95 backdrop-blur-sm dark:bg-dark-bg/95'
 				>
 					<div className='flex flex-col h-full'>
-						{/* Header */}
 						<div className='flex items-center justify-end p-4 border-b border-gray-200 dark:border-dark-border'>
 							<button
 								onClick={onClose}
@@ -26,8 +24,7 @@ export const MobileMenu = ({ isOpen, onClose, isAuthenticated, onLogout }: Mobil
 							</button>
 						</div>
 
-						{/* Navigation Links */}
-						<div className='flex flex-col flex-grow p-4 space-y-4'>
+						<div className='flex flex-col flex-grow p-4'>
 							{mainNavLinks.map((link) => (
 								<Link
 									key={link.to}
@@ -42,12 +39,22 @@ export const MobileMenu = ({ isOpen, onClose, isAuthenticated, onLogout }: Mobil
 
 							{!isAuthenticated ? (
 								<>
-									<Button to='/login' variant='text' size='lg' isFullWidth onClick={onClose}>
+									<Link
+										to='/login'
+										onClick={onClose}
+										className='flex items-center w-full gap-2 px-4 py-3 text-sm font-medium text-gray-700 transition-colors rounded-lg dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-dark-border'
+									>
+										<LogIn className='w-4 h-4' />
 										Giriş Yap
-									</Button>
-									<Button to='/register' variant='text' size='lg' isFullWidth onClick={onClose}>
+									</Link>
+									<Link
+										to='/register'
+										onClick={onClose}
+										className='flex items-center w-full gap-2 px-4 py-3 text-sm font-medium text-gray-700 transition-colors rounded-lg dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-dark-border'
+									>
+										<UserPlus className='w-4 h-4' />
 										Kayıt Ol
-									</Button>
+									</Link>
 								</>
 							) : (
 								<>

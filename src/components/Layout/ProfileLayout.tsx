@@ -1,16 +1,15 @@
 import { Link, Outlet, useLocation, Navigate } from 'react-router-dom';
 import { cn } from '../../utils/cn';
-import { useSelector, useDispatch } from 'react-redux';
 import { selectIsAuthenticated, selectUser, logoutUser } from '../../store/features/authSlice';
 import { profileNavigation } from '../../constants';
 import { LogOut } from 'lucide-react';
-import type { AppDispatch } from '../../store/store';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
 
 export const ProfileLayout = () => {
 	const location = useLocation();
-	const dispatch = useDispatch<AppDispatch>();
-	const isAuthenticated = useSelector(selectIsAuthenticated);
-	const user = useSelector(selectUser);
+	const dispatch = useAppDispatch();
+	const isAuthenticated = useAppSelector(selectIsAuthenticated);
+	const user = useAppSelector(selectUser);
 
 	if (!isAuthenticated || !user) {
 		return <Navigate to='/login' state={{ from: location }} replace />;
@@ -24,7 +23,6 @@ export const ProfileLayout = () => {
 		<div className='relative overflow-hidden isolate'>
 			<div className='container py-8 mx-auto'>
 				<div className='grid grid-cols-12 gap-8'>
-					{/* Sidebar */}
 					<div className='col-span-12 md:col-span-3'>
 						<nav className='overflow-hidden rounded-lg shadow-sm bg-white/80 backdrop-blur-sm dark:bg-dark-card/80'>
 							<div className='p-2 space-y-2'>
@@ -58,7 +56,6 @@ export const ProfileLayout = () => {
 						</nav>
 					</div>
 
-					{/* Content */}
 					<div className='col-span-12 md:col-span-9'>
 						<div className='overflow-hidden rounded-lg shadow-sm bg-white/80 backdrop-blur-sm dark:bg-dark-card/80'>
 							<Outlet />

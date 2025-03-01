@@ -1,11 +1,11 @@
-import { useSelector, useDispatch } from 'react-redux';
 import { selectUser, selectIsLoading, updateProfile } from '../../store/features/authSlice';
 import { Formik, Form } from 'formik';
 import { toast } from 'react-hot-toast';
-import { AppDispatch } from '../../store/store';
 import { corporateSchema, individualSchema } from '../../schemas/auth';
 import { Helmet } from 'react-helmet-async';
 import { Input } from '../../components/Input/Input';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { User, Building2, Phone, MapPin } from 'lucide-react';
 
 interface FormValues {
 	first_name?: string;
@@ -17,9 +17,9 @@ interface FormValues {
 }
 
 const ProfileEdit = () => {
-	const dispatch = useDispatch<AppDispatch>();
-	const user = useSelector(selectUser);
-	const isLoading = useSelector(selectIsLoading);
+	const dispatch = useAppDispatch();
+	const user = useAppSelector(selectUser);
+	const isLoading = useAppSelector(selectIsLoading);
 	const userData = user?.user_metadata;
 	const isIndividual = userData?.user_type === 'bireysel';
 
@@ -53,7 +53,6 @@ const ProfileEdit = () => {
 			</Helmet>
 			<div className='p-6'>
 				<div className='space-y-6'>
-					{/* Başlık */}
 					<div className='pb-6 border-b dark:border-dark-border'>
 						<h1 className='text-2xl font-semibold text-gray-900 dark:text-white'>
 							{isIndividual ? 'Bireysel Profil Düzenle' : 'Kurumsal Profil Düzenle'}
@@ -61,18 +60,18 @@ const ProfileEdit = () => {
 						<p className='mt-1 text-sm text-gray-500 dark:text-gray-400'>Profil bilgilerinizi buradan güncelleyebilirsiniz.</p>
 					</div>
 
-					{/* Form */}
 					<Formik initialValues={initialValues} validationSchema={isIndividual ? individualSchema : corporateSchema} onSubmit={handleSubmit}>
 						{({ errors, touched, isSubmitting, getFieldProps }) => (
 							<Form className='space-y-6'>
 								<div className='grid gap-6 md:grid-cols-2'>
 									{isIndividual ? (
 										<>
-											{/* Bireysel Form Alanları */}
 											<Input
 												id='first_name'
 												type='text'
 												label='Ad'
+												leftIcon={<User className='w-4 h-4 text-gray-500' />}
+												preventAutocomplete
 												{...getFieldProps('first_name')}
 												error={touched.first_name ? errors.first_name : undefined}
 											/>
@@ -81,17 +80,20 @@ const ProfileEdit = () => {
 												id='last_name'
 												type='text'
 												label='Soyad'
+												leftIcon={<User className='w-4 h-4 text-gray-500' />}
+												preventAutocomplete
 												{...getFieldProps('last_name')}
 												error={touched.last_name ? errors.last_name : undefined}
 											/>
 										</>
 									) : (
 										<>
-											{/* Kurumsal Form Alanları */}
 											<Input
 												id='company_name'
 												type='text'
 												label='Şirket Adı'
+												leftIcon={<Building2 className='w-4 h-4 text-gray-500' />}
+												preventAutocomplete
 												{...getFieldProps('company_name')}
 												error={touched.company_name ? errors.company_name : undefined}
 											/>
@@ -100,34 +102,35 @@ const ProfileEdit = () => {
 												id='tax_number'
 												type='text'
 												label='Vergi Numarası'
+												leftIcon={<Building2 className='w-4 h-4 text-gray-500' />}
+												preventAutocomplete
 												{...getFieldProps('tax_number')}
 												error={touched.tax_number ? errors.tax_number : undefined}
 											/>
 										</>
 									)}
 
-									{/* Ortak Form Alanları */}
 									<Input
 										id='phone'
 										type='tel'
 										label='Telefon'
+										leftIcon={<Phone className='w-4 h-4 text-gray-500' />}
+										preventAutocomplete
 										{...getFieldProps('phone')}
 										error={touched.phone ? errors.phone : undefined}
 									/>
 
-									<div className='space-y-2 md:col-span-2'>
-										<label htmlFor='address' className='block text-sm font-medium text-gray-700 dark:text-dark-text'>
-											Adres
-										</label>
-										<textarea
+									<div className='md:col-span-2'>
+										<Input
 											id='address'
-											{...getFieldProps('address')}
+											label='Adres'
+											leftIcon={<MapPin className='w-4 h-4 text-gray-500' />}
+											preventAutocomplete
+											isTextarea
 											rows={3}
-											className='w-full px-4 py-2.5 bg-gray-50 dark:bg-dark-card border rounded-lg text-gray-900 dark:text-dark-text text-sm placeholder:text-gray-500 dark:placeholder:text-white/60 focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200 dark:border-dark-border'
+											{...getFieldProps('address')}
+											error={touched.address ? errors.address : undefined}
 										/>
-										{touched.address && errors.address && (
-											<p className='mt-1.5 text-sm text-red-500'>{String(errors.address)}</p>
-										)}
 									</div>
 								</div>
 
