@@ -1,40 +1,21 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Check } from 'lucide-react';
-import { supabase } from '../../lib/supabase';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { fetchPackagesByType, selectWebPackages, selectPackagesLoading, selectPackagesError } from '../../store/features/packagesSlice';
 import { Package } from '../../types';
 
 const WebApp = () => {
-	const [packages, setPackages] = useState<Package[]>([]);
-	const [loading, setLoading] = useState(true);
-	const [error, setError] = useState<string | null>(null);
+	const dispatch = useAppDispatch();
+	const packages = useAppSelector(selectWebPackages);
+	const loading = useAppSelector(selectPackagesLoading);
+	const error = useAppSelector(selectPackagesError);
 
 	useEffect(() => {
-		const fetchPackages = async () => {
-			try {
-				const { data, error } = await supabase.from('packages').select('*').eq('status', 'active').eq('type', 'web');
-
-				if (error) {
-					throw error;
-				}
-
-				const parsedPackages = data.map((pkg) => ({
-					...pkg,
-					features: typeof pkg.features === 'string' ? JSON.parse(pkg.features) : pkg.features
-				}));
-
-				setPackages(parsedPackages);
-			} catch (err) {
-				setError(err instanceof Error ? err.message : 'Paketler yüklenirken bir hata oluştu');
-			} finally {
-				setLoading(false);
-			}
-		};
-
-		fetchPackages();
-	}, []);
+		dispatch(fetchPackagesByType('web'));
+	}, [dispatch]);
 
 	if (loading) {
 		return (
@@ -95,7 +76,7 @@ const WebApp = () => {
 					</div>
 
 					<div className='grid max-w-2xl grid-cols-1 mx-auto mt-16 gap-y-6 sm:mt-20 lg:mx-0 lg:max-w-none lg:grid-cols-3 lg:gap-8'>
-						{packages.map((pkg, index) => (
+						{packages.map((pkg: Package, index: number) => (
 							<motion.div
 								key={pkg.id}
 								initial={{ opacity: 0, y: 20 }}
@@ -122,7 +103,7 @@ const WebApp = () => {
 								</Link>
 								<ul role='list' className='mt-8 space-y-3 text-sm leading-6 text-gray-600 dark:text-gray-400'>
 									{Array.isArray(pkg.features) &&
-										pkg.features.map((feature, featureIndex) => (
+										pkg.features.map((feature: string, featureIndex: number) => (
 											<li key={featureIndex} className='flex gap-x-3'>
 												<Check
 													className='flex-none w-5 h-6 text-primary-600 dark:text-primary-400'

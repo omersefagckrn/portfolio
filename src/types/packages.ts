@@ -11,3 +11,10 @@ export interface Package {
 	created_at: string;
 	updated_at: string;
 }
+
+export interface PackagesState {
+	webPackages: Package[];
+	mobilePackages: Package[];
+	isLoading: boolean;
+	error: string | null;
+}
