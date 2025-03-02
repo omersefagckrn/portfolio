@@ -3,6 +3,7 @@ import { supabase } from '../../lib/supabase';
 import type { RootState } from '../store';
 import type { User } from '@supabase/supabase-js';
 import type { RegisterUserData, UpdateProfileData, AuthState } from '../../types';
+import { PostgrestError } from '@supabase/supabase-js';
 
 export const paymentInfo = {
 	bankName: 'Kuveyt Türk',
@@ -234,17 +235,23 @@ export const forgotPassword = createAsyncThunk('auth/forgotPassword', async (ema
 			}
 		}
 
+		// Şifre sıfırlama e-postası gönder
 		const { error } = await supabase.auth.resetPasswordForEmail(email, {
 			redirectTo: `${window.location.origin}/reset-password`
 		});
 
 		if (error) {
-			if (error.message.includes('Email not found')) {
+			// Hata mesajlarını daha kapsamlı bir şekilde işle
+			const errorMessage = error.message.toLowerCase();
+
+			if (errorMessage.includes('email not found') || errorMessage.includes('invalid email') || errorMessage.includes('user not found')) {
 				return rejectWithValue('Bu email adresi ile kayıtlı bir hesap bulunamadı.');
 			}
-			if (error.message.includes('Too many requests')) {
+
+			if (errorMessage.includes('too many requests') || errorMessage.includes('rate limit')) {
 				return rejectWithValue('Çok fazla deneme yaptınız. Lütfen birkaç dakika bekleyip tekrar deneyin.');
 			}
+
 			return rejectWithValue(translateAuthError(error.message));
 		}
 

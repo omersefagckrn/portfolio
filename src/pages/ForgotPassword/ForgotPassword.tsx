@@ -39,6 +39,11 @@ const ForgotPassword = () => {
 						duration: 5000,
 						icon: '⏳'
 					});
+				} else if (error.includes('kayıtlı bir hesap bulunamadı')) {
+					toast.error('Bu email adresi ile kayıtlı bir hesap bulunamadı. Lütfen kayıtlı olduğunuz email adresini giriniz.', {
+						duration: 5000,
+						icon: '❌'
+					});
 				} else {
 					toast.error(error);
 				}
