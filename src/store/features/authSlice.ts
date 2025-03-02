@@ -235,6 +235,21 @@ export const forgotPassword = createAsyncThunk('auth/forgotPassword', async (ema
 			}
 		}
 
+		// Önce email'in kayıtlı olup olmadığını kontrol edelim
+		// Supabase'de signInWithOtp fonksiyonu ile email'in varlığını kontrol edebiliriz
+		// Bu fonksiyon, email kayıtlı değilse hata döndürür
+		const { error: checkError } = await supabase.auth.signInWithOtp({
+			email,
+			options: {
+				shouldCreateUser: false // Yeni kullanıcı oluşturma
+			}
+		});
+
+		// Email kayıtlı değilse hata döndür
+		if (checkError && checkError.message.toLowerCase().includes('user not found')) {
+			return rejectWithValue('Bu email adresi ile kayıtlı bir hesap bulunamadı.');
+		}
+
 		// Şifre sıfırlama e-postası gönder
 		const { error } = await supabase.auth.resetPasswordForEmail(email, {
 			redirectTo: `${window.location.origin}/reset-password`
@@ -244,6 +259,8 @@ export const forgotPassword = createAsyncThunk('auth/forgotPassword', async (ema
 			// Hata mesajlarını daha kapsamlı bir şekilde işle
 			const errorMessage = error.message.toLowerCase();
 
+			// Supabase, kayıtlı olmayan e-posta adresleri için de başarılı yanıt döndürüyor
+			// Bu nedenle, hata mesajlarını kontrol ederek kullanıcıya doğru bilgi vermeliyiz
 			if (errorMessage.includes('email not found') || errorMessage.includes('invalid email') || errorMessage.includes('user not found')) {
 				return rejectWithValue('Bu email adresi ile kayıtlı bir hesap bulunamadı.');
 			}
@@ -255,6 +272,7 @@ export const forgotPassword = createAsyncThunk('auth/forgotPassword', async (ema
 			return rejectWithValue(translateAuthError(error.message));
 		}
 
+		// Başarılı durumda, son deneme zamanını kaydet
 		localStorage.setItem('lastPasswordResetAttempt', now.toString());
 		return true;
 	} catch (error) {
