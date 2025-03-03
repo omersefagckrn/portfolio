@@ -33,6 +33,9 @@ const WebApp = () => {
 		);
 	}
 
+	// Paketleri fiyata göre küçükten büyüğe sırala
+	const sortedPackages = [...packages].sort((a, b) => a.price - b.price);
+
 	return (
 		<>
 			<Helmet>
@@ -76,7 +79,7 @@ const WebApp = () => {
 					</div>
 
 					<div className='grid max-w-2xl grid-cols-1 mx-auto mt-10 gap-y-4 sm:mt-12 lg:mx-0 lg:max-w-none lg:grid-cols-3 lg:gap-6'>
-						{packages.map((pkg: Package, index: number) => (
+						{sortedPackages.map((pkg: Package, index: number) => (
 							<motion.div
 								key={pkg.id}
 								initial={{ opacity: 0, y: 20 }}
