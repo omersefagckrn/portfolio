@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Check } from 'lucide-react';
+import { Check, Phone } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
@@ -45,6 +45,28 @@ const MobileApp = () => {
 
 			<div className='py-12 bg-white dark:bg-dark-bg sm:py-16'>
 				<div className='px-6 mx-auto max-w-7xl lg:px-8'>
+					{/* Özel Teklifler Banner */}
+					<motion.div
+						initial={{ opacity: 0, y: -20 }}
+						animate={{ opacity: 1, y: 0 }}
+						transition={{ duration: 0.5 }}
+						className='p-4 mb-10 text-center text-white rounded-lg shadow-lg bg-gradient-to-r from-primary-600 to-primary-400 dark:from-primary-500 dark:to-primary-300'
+					>
+						<div className='flex flex-col items-center justify-between gap-4 sm:flex-row'>
+							<div className='flex items-center'>
+								<Phone className='w-6 h-6 mr-2' />
+								<h3 className='text-xl font-bold'>Mobil Uygulama Projeniz mi Var?</h3>
+							</div>
+							<p className='text-sm sm:text-base'>Özel mobil uygulama teklifleri için hemen bizimle iletişime geçin!</p>
+							<Link
+								to='/contact'
+								className='px-4 py-2 text-sm font-medium text-primary-600 transition-colors bg-white rounded-md hover:bg-gray-100 dark:text-primary-500 dark:hover:bg-gray-800'
+							>
+								Bize Ulaşın
+							</Link>
+						</div>
+					</motion.div>
+
 					<div className='max-w-2xl mx-auto text-center'>
 						<motion.h2
 							initial={{ opacity: 0, y: 20 }}
