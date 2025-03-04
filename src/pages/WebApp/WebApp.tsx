@@ -53,20 +53,23 @@ const WebApp = () => {
 						initial={{ opacity: 0, y: -20 }}
 						animate={{ opacity: 1, y: 0 }}
 						transition={{ duration: 0.5 }}
-						className='p-4 mb-10 text-center text-white rounded-lg shadow-lg bg-gradient-to-r from-primary-600 to-primary-400 dark:from-primary-500 dark:to-primary-300'
+						className='mb-10 overflow-hidden rounded-lg shadow-lg bg-primary-500'
 					>
-						<div className='flex flex-col items-center justify-between gap-4 sm:flex-row'>
-							<div className='flex items-center'>
-								<Phone className='w-6 h-6 mr-2' />
-								<h3 className='text-xl font-bold'>Özel İhtiyaçlarınız mı Var?</h3>
+						<div className='flex flex-col items-center gap-4 p-4 lg:flex-row sm:p-6'>
+							<div className='flex-shrink-0 p-3 rounded-full bg-white/20'>
+								<Phone className='w-6 h-6 text-white' />
 							</div>
-							<p className='text-sm sm:text-base'>İşletmenize özel teklifler için hemen bizimle iletişime geçin!</p>
-							<Link
-								to='/contact'
-								className='px-4 py-2 text-sm font-medium transition-colors bg-white rounded-md text-primary-600 hover:bg-gray-100 dark:text-primary-500 dark:hover:bg-gray-800'
+							<div className='flex-grow'>
+								<h3 className='text-xl font-bold text-center text-white lg:text-left'>Web Projeniz mi Var?</h3>
+								<p className='text-sm text-center text-white/90 lg:text-left'>Özel teklifler için hemen arayın!</p>
+							</div>
+							<a
+								href='tel:+905078455183'
+								className='flex items-center flex-shrink-0 px-4 py-2 space-x-2 font-medium transition-colors bg-white rounded-md text-primary-600 hover:bg-gray-100 whitespace-nowrap'
 							>
-								Bize Ulaşın
-							</Link>
+								<Phone className='w-6 h-6 text-primary-600' />
+								<span>0507 845 5183</span>
+							</a>
 						</div>
 					</motion.div>
 
@@ -121,7 +124,7 @@ const WebApp = () => {
 									<span className='text-sm font-semibold leading-6 text-gray-600 dark:text-gray-400'>₺</span>
 								</p>
 								<Link
-									to={`/profile`}
+									to={`/profile/payment?package=${encodeURIComponent(pkg.name)}&price=${pkg.price}`}
 									className='block px-3 py-2 mt-4 text-sm font-semibold leading-6 text-center text-white transition-colors rounded-md bg-primary-600 hover:bg-primary-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600 dark:bg-primary-500 dark:hover:bg-primary-400'
 								>
 									Hemen Başla
